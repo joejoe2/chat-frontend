@@ -17,9 +17,11 @@ export const auth = {
                 }).catch(error => {
                     context.commit('loginFailure');
                     if (error.response && error.response.status == 400) {
-                        error.message = "Incorrect username or password !"
+                        error.message = error.response.data.message || "Incorrect username or password !"
+                    } else if (error.response && error.response.data) {
+                        error.message = error.response.data.message || "Unknown error, please try again later !";
                     } else {
-                        error.message = "Unknown error, please try again later !"
+                        error.message = "Unknown error, please try again later !";
                     }
                     return Promise.reject(error);
                 });
@@ -32,20 +34,29 @@ export const auth = {
                 if (error.response && error.response.status == 400) {
                     error.message = "Invalid token !"
                     context.commit('logoutSuccess');
+                } else if (error.response && error.response.data) {
+                    error.message = error.response.data.message || "Unknown error, please try again later !";
                 } else {
-                    error.message = "Unknown error, please try again later !"
+                    error.message = "Unknown error, please try again later !";
                 }
+
                 return Promise.reject(error);
             });
         },
         register(context, payload) {
-            return AuthService.register(payload.username, payload.password, payload.email).then(
+            return AuthService.register(payload.username, payload.password, payload.email, payload.verification).then(
                 response => {
-                    context.commit('registerSuccess');
                     return Promise.resolve(response.data);
                 },
                 error => {
-                    context.commit('registerFailure');
+                    if (error.response && error.response.status == 400) {
+                        error.errors = error.response.data.errors;
+                        error.message = error.response.data.message || "";
+                    } else if (error.response && error.response.data) {
+                        error.message = error.response.data.message || "Unknown error, please try again later !";
+                    } else {
+                        error.message = "Unknown error, please try again later !";
+                    }
                     return Promise.reject(error);
                 }
             );
@@ -59,11 +70,76 @@ export const auth = {
                     context.commit('refreshFailure');
                     if (error.response && error.response.status == 400) {
                         error.message = "Invalid token !"
+                    } else if (error.response && error.response.data) {
+                        error.message = error.response.data.message || "Unknown error, please try again later !";
                     } else {
-                        error.message = "Unknown error, please try again later !"
+                        error.message = "Unknown error, please try again later !";
                     }
                     return Promise.reject(error);
                 });
+        },
+        issueVerificationCode(context, payload) {
+            return AuthService.issueVerificationCode(payload.email).then(
+                verificationKey => {
+                    return Promise.resolve(verificationKey);
+                }).catch(
+                    error => {
+                        if (error.response && error.response.status == 400) {
+                            error.errors = error.response.data.errors;
+                            error.message = error.response.data.message || "";
+                        } else if (error.response && error.response.data) {
+                            error.message = error.response.data.message || "Unknown error, please try again later !";
+                        } else {
+                            error.message = "Unknown error, please try again later !";
+                        }
+                        return Promise.reject(error);
+                    });
+        },
+        changePassword(context, payload) {
+            return AuthService.changePassword(payload.oldPassword, payload.newPassword).then(() => {
+                context.commit('logoutSuccess');
+                return Promise.resolve("Your password is successfully changed !");
+            }).catch(error => {
+                if (error.response && error.response.status == 400) {
+                    error.errors = error.response.data.errors;
+                    error.message = error.response.data.message || "";
+                } else if (error.response && error.response.data) {
+                    error.message = error.response.data.message || "Unknown error, please try again later !";
+                } else {
+                    error.message = "Unknown error, please try again later !";
+                }
+                return Promise.reject(error);
+            });
+        },
+        forgetPassword(context, payload) {
+            return AuthService.forgetPassword(payload.email).then(() => {
+                return Promise.resolve("The password reset link is sent to your email !");
+            }).catch(error => {
+                if (error.response && error.response.status == 400) {
+                    error.errors = error.response.data.errors;
+                    error.message = error.response.data.message || "";
+                } else if (error.response && error.response.data) {
+                    error.message = error.response.data.message || "Unknown error, please try again later !";
+                } else {
+                    error.message = "Unknown error, please try again later !";
+                }
+                return Promise.reject(error);
+            });
+        },
+        resetPassword(context, payload) {
+            return AuthService.resetPassword(payload.token, payload.newPassword).then(() => {
+                return Promise.resolve("Your password is successfully reset !");
+            }).catch(error => {
+                if (error.response && error.response.status == 400) {
+                    error.errors = error.response.data.errors;
+                    error.message = error.response.data.message || "";
+                } else if (error.response && error.response.data) {
+                    error.message = error.response.data.message || "Unknown error, please try again later !";
+                } else {
+                    error.message = "Unknown error, please try again later !";
+                }
+                return Promise.reject(error);
+            });
         },
     },
     mutations: {
@@ -87,11 +163,11 @@ export const auth = {
             state.status.loggedIn = false;
             state.user = null;
         },
-        refreshSuccess(state, user){
+        refreshSuccess(state, user) {
             state.status.loggedIn = true;
             state.user = user;
         },
-        refreshFailure(state){
+        refreshFailure(state) {
             state.status.loggedIn = false;
             state.user = null;
         },

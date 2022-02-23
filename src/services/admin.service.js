@@ -8,6 +8,13 @@ class AdminService {
                 return response.data;
             });
     }
+
+    changeRoleOf(userId, role){
+        return api.post('/admin/changeRoleOf', { id: userId, role: role }, { headers: authHeader() })
+            .then(response => {
+                return response;
+            });
+    }
 }
 
 export default new AdminService();

@@ -17,13 +17,20 @@ export const user = {
                 context.commit('setProfile', profile);
                 return Promise.resolve(profile);
             }).catch(error => {
-                error.message = "Unknown error, please try again later !"
+                if (error.response && error.response.status == 400) {
+                    error.errors = error.response.data.errors;
+                    error.message = error.response.data.message || "";
+                } else if (error.response && error.response.data) {
+                    error.message = error.response.data.message || "Unknown error, please try again later !";
+                } else {
+                    error.message = "Unknown error, please try again later !";
+                }
                 return Promise.reject(error);
             });
         }
     },
     mutations: {
-        setProfile(state, profile){
+        setProfile(state, profile) {
             state.profile = profile;
         },
     }

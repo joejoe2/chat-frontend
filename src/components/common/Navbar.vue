@@ -48,6 +48,9 @@
               </li>
               <li><hr class="dropdown-divider" /></li>
               <li>
+                <a class="dropdown-item" href="#" v-on:click="toPasswordChange">Change Password</a>
+              </li>
+              <li>
                 <a class="dropdown-item" href="#" v-on:click="logout">Logout</a>
               </li>
             </ul>
@@ -59,7 +62,7 @@
 </template>
 
 <script>
-import store from "../store/index";
+import store from "../../store/index";
 
 export default {
   name: "Navbar",
@@ -86,7 +89,10 @@ export default {
     },
     toAdmin(){
       this.$router.push({name: "Admin"});
-    }
+    },
+    toPasswordChange(){
+      this.$router.push({name: "PasswordChange"});
+    },
   },
   computed: {
     /*

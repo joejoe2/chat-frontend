@@ -44,11 +44,12 @@ class AuthService {
         });
     }
 
-    register(username, password, email) {
+    register(username, password, email, verification) {
         return api.post('/auth/register', {
             username: username,
             email: email,
-            password: password
+            password: password,
+            verification: verification,
         });
     }
 
@@ -73,6 +74,46 @@ class AuthService {
                 localStorage.removeItem('user');
                 return Promise.reject(error);
             });
+    }
+
+    issueVerificationCode(email){
+        return api.post('/auth/issueVerificationCode', {
+            email: email,
+        }).then(response => {
+            return response.data.key;
+        });
+    }
+
+    changePassword(oldPassword, newPassword){
+        return api.post('/auth/changePassword', {
+            oldPassword: oldPassword,
+            newPassword: newPassword,
+        }, {headers: authHeader()})
+        .then(response => {
+            if(response.status==200){
+                localStorage.removeItem('user');
+            }
+            return response;
+        });
+    }
+
+    forgetPassword(email){
+        return api.post('/auth/forgetPassword', {
+            email: email,
+        })
+        .then(response => {
+            return response;
+        });
+    }
+
+    resetPassword(token, newPassword){
+        return api.post('/auth/resetPassword', {
+            token: token,
+            newPassword: newPassword,
+        })
+        .then(response => {
+            return response;
+        });
     }
 }
 

@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import store from "../store/index";
+import store from "../../store/index";
 
 export default {
   name: "Profile",
@@ -81,8 +81,9 @@ export default {
         .dispatch("user/getProfile")
         .then((profile) => {
           this.profile = profile;
-        }).catch(()=>{
+        }).catch((error)=>{
           this.profile = "";
+          console.log(error.errors || error.message);
         })
     },
   },

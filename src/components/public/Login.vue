@@ -1,14 +1,15 @@
 <template>
   <div class="row justify-content-center mt-3">
     <div class="col-12 col-md-8 col-lg-4 justify-content-center">
-      <h2>Register</h2>
+      <h2>Login</h2>
       <div class="card w-100 mb-4">
         <div class="card-body">
-          <div class="mb-2">
-            <div v-if="errorMsg" class="alert alert-danger" role="alert">
-              {{ errorMsg }}
-            </div>
-          </div>
+          <img
+            id="profile-img"
+            src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+            class="profile-img-card"
+          />
+
           <div class="mb-2">
             <label for="username">Username</label>
             <input
@@ -28,18 +29,23 @@
             />
           </div>
           <div class="mb-2">
-            <label for="email">Email</label>
-            <input
-              v-model="email"
-              name="email"
-              type="email"
-              class="form-control"
-            />
+            <button
+              class="btn btn-success"
+              v-on:click="login"
+              v-bind:disabled="isLoading"
+            >
+              <span>Login</span>
+            </button>
+            or
+            <a href="#" v-on:click="toRegister">register now !</a>
           </div>
           <div class="mb-2">
-            <button class="btn btn-success" v-on:click="register">
-              <span>Register</span>
-            </button>
+            <div v-if="errorMsg" class="alert alert-danger" role="alert">
+              {{ errorMsg }}
+            </div>
+          </div>
+          <div class="mb-2">
+            <a href="#" v-on:click="toForgetPassword">forgot your password ?</a>
           </div>
         </div>
       </div>
@@ -48,10 +54,10 @@
 </template>
 
 <script>
-import store from "../store/index";
+import store from "../../store/index";
 
 export default {
-  name: "Register",
+  name: "Login",
   created() {
     if (store.state.auth.status.loggedIn) {
       this.$router.replace({ name: "Home" });
@@ -61,28 +67,42 @@ export default {
     return {
       username: "",
       password: "",
-      email: "",
+      errors: {},
       errorMsg: "",
+      isLoading: false,
     };
   },
+  computed: {},
   methods: {
-    register() {
+    login() {
+      this.isLoading = true;
       store
-        .dispatch("auth/register", {
+        .dispatch("auth/login", {
           username: this.username,
           password: this.password,
-          email: this.email
         })
         .then(() => {
-          this.$router.push({name: "Login"});
+          this.$router.back();
         })
         .catch((error) => {
+          if (error.errors) this.errors = error.errors;
+          else this.errors = {};
+
           if (error.message) {
-            this.errorMsg = error.response.data.info || error.message;
+            this.errorMsg = error.message;
           } else {
-            console.log(error);
+            this.errorMsg = "";
           }
+        })
+        .finally(() => {
+          this.isLoading = false;
         });
+    },
+    toRegister() {
+      this.$router.push({ name: "Register" });
+    },
+    toForgetPassword() {
+      this.$router.push({ name: "ForgetPassword" });
     },
   },
 };

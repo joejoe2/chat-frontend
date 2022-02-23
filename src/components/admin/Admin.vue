@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import UserList from './UseList.vue';
+import UserList from './UserList.vue';
 
 export default {
     name: 'Admin',
