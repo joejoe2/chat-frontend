@@ -114,6 +114,7 @@ export default {
     Loading,
   },
   created() {
+    this.isLoading=true;
     this.getUserList(this.userList.currentPage, this.userList.pageSize);
   },
   data() {
@@ -130,7 +131,6 @@ export default {
   },
   methods: {
     getUserList(page, size) {
-      this.isLoading=true;
       store
         .dispatch("admin/getUserList", {
           page: page,
