@@ -1,6 +1,11 @@
 <template>
   <div class="row justify-content-center mt-3">
     <div class="card w-100 mb-4">
+      <loading v-model:active="isLoading"
+                 :can-cancel="false"
+                 :is-full-page="true"
+                 :loader="'dots'"/>
+      
       <div class="card-body">
         <h2 class="card-title text-center">User List</h2>
         <ul class="list-group list-group-flush">
@@ -100,9 +105,14 @@
 
 <script>
 import store from "../../store/index";
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
   name: "UserList",
+  components:{
+    Loading,
+  },
   created() {
     this.getUserList(this.userList.currentPage, this.userList.pageSize);
   },
@@ -115,10 +125,12 @@ export default {
         totalPages: 0,
         pageSize: 10,
       },
+      isLoading: false,
     };
   },
   methods: {
     getUserList(page, size) {
+      this.isLoading=true;
       store
         .dispatch("admin/getUserList", {
           page: page,
@@ -129,6 +141,8 @@ export default {
         })
         .catch((error) => {
           console.log(error.errors || error.message);
+        }).finally(()=>{
+          this.isLoading=false;
         });
     },
     changeRoleOf(userId, toRole){

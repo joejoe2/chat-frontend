@@ -2,6 +2,13 @@
   <div class="row justify-content-center mt-3">
     <div class="col-12 col-md-8 col-lg-8 justify-content-center">
       <div class="card w-100 mb-4">
+        <loading
+          v-model:active="isLoading"
+          :can-cancel="false"
+          :is-full-page="true"
+          :loader="'dots'"
+        />
+
         <div class="card-body">
           <h2 class="card-title text-center">Profile</h2>
           <ul class="list-group list-group-flush mb-2">
@@ -64,27 +71,38 @@
 
 <script>
 import store from "../../store/index";
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
 
 export default {
   name: "Profile",
+  components: {
+    Loading,
+  },
   created() {
     this.getProfile();
   },
   data() {
     return {
       profile: { id: "", username: "", email: "", role: "", registeredAt: "" },
+      isLoading: false,
     };
   },
   methods: {
     getProfile() {
+      this.isLoading = true;
       store
         .dispatch("user/getProfile")
         .then((profile) => {
           this.profile = profile;
-        }).catch((error)=>{
+        })
+        .catch((error) => {
           this.profile = "";
           console.log(error.errors || error.message);
         })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
   },
 };
