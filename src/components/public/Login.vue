@@ -37,7 +37,9 @@
               <span>Login</span>
             </button>
             or
-            <a v-on:click="toRegister">register now !</a>
+            <router-link :to="{ name: 'Register' }">
+              register now !
+            </router-link>
           </div>
           <div class="mb-2">
             <div v-if="errorMsg" class="alert alert-danger" role="alert">
@@ -45,7 +47,9 @@
             </div>
           </div>
           <div class="mb-2">
-            <a v-on:click="toForgetPassword">forgot your password ?</a>
+            <router-link :to="{ name: 'ForgetPassword' }">
+              forgot your password ?
+            </router-link>
           </div>
         </div>
       </div>
