@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Navbar</a>
+      <a class="navbar-brand">Navbar</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -23,7 +23,6 @@
             <a
               class="nav-link active"
               aria-current="page"
-              href="#"
               v-on:click="toHome"
               >Home</a
             >
@@ -31,7 +30,6 @@
           <li class="nav-item dropdown">
             <a
               class="nav-link dropdown-toggle"
-              href="#"
               id="navbarDropdown"
               role="button"
               data-bs-toggle="dropdown"
@@ -41,17 +39,17 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li>
-                <a class="dropdown-item" href="#" v-on:click="toProfile">Profile</a>
+                <a class="dropdown-item" v-on:click="toProfile">Profile</a>
               </li>
               <li v-if="isAdmin">
-                <a class="dropdown-item" href="#" v-on:click="toAdmin">Admin</a>
+                <a class="dropdown-item" v-on:click="toAdmin">Admin</a>
               </li>
               <li><hr class="dropdown-divider" /></li>
               <li>
-                <a class="dropdown-item" href="#" v-on:click="toPasswordChange">Change Password</a>
+                <a class="dropdown-item" v-on:click="toPasswordChange">Change Password</a>
               </li>
               <li>
-                <a class="dropdown-item" href="#" v-on:click="logout">Logout</a>
+                <a class="dropdown-item" v-on:click="logout">Logout</a>
               </li>
             </ul>
           </li>

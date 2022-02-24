@@ -70,9 +70,9 @@
                     *
                   </button>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a v-if="user.role!='ADMIN'" class="dropdown-item" v-on:click="changeRoleOf(user.id, 'ADMIN')" href="#">Change to ADMIN</a></li>
-                    <li><a v-if="user.role!='STAFF'" class="dropdown-item" v-on:click="changeRoleOf(user.id, 'STAFF')" href="#">Change to STAFF</a></li>
-                    <li><a v-if="user.role!='NORMAL'" class="dropdown-item" v-on:click="changeRoleOf(user.id, 'NORMAL')" href="#">Change to NORMAL</a></li>
+                    <li><a v-if="user.role!='ADMIN'" class="dropdown-item" v-on:click="changeRoleOf(user.id, 'ADMIN')" >Change to ADMIN</a></li>
+                    <li><a v-if="user.role!='STAFF'" class="dropdown-item" v-on:click="changeRoleOf(user.id, 'STAFF')" >Change to STAFF</a></li>
+                    <li><a v-if="user.role!='NORMAL'" class="dropdown-item" v-on:click="changeRoleOf(user.id, 'NORMAL')" >Change to NORMAL</a></li>
                   </ul>
                 </div>
               </div>
@@ -83,18 +83,18 @@
         <nav aria-label="Page navigation UserList">
           <ul class="pagination justify-content-center">
             <li class="page-item">
-              <a v-if="userList.currentPage>0" class="page-link" href="#" v-on:click="getUserList(userList.currentPage-1, userList.pageSize)">Previous</a>
+              <a v-if="userList.currentPage>0" class="page-link" v-on:click="getUserList(userList.currentPage-1, userList.pageSize)">Previous</a>
             </li>
             <template v-for="pageNum in userList.totalPages" v-bind:key="pageNum">
                 <li v-if="pageNum-1==userList.currentPage" class="page-item active">
-                    <a class="page-link" href="#">{{ pageNum }}</a>
+                    <a class="page-link">{{ pageNum }}</a>
                 </li>
                 <li v-else class="page-item">
-                    <a class="page-link" href="#" v-on:click="getUserList(pageNum-1, userList.pageSize)">{{ pageNum }}</a>
+                    <a class="page-link" v-on:click="getUserList(pageNum-1, userList.pageSize)">{{ pageNum }}</a>
                 </li>
             </template>
             <li class="page-item">
-                <a v-if="userList.currentPage<userList.totalPages-1" class="page-link" href="#" v-on:click="getUserList(userList.currentPage+1, userList.pageSize)">Next</a>
+                <a v-if="userList.currentPage<userList.totalPages-1" class="page-link" v-on:click="getUserList(userList.currentPage+1, userList.pageSize)">Next</a>
             </li>
           </ul>
         </nav>
