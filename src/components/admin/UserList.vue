@@ -62,7 +62,7 @@
                 </div>
                 <!-- User Registered At -->
                 <div class="col-lg-3 d-none d-lg-block">
-                  <span>{{ user.registeredAt }}</span>
+                  <span>{{ new Date(user.registeredAt+'Z') }}</span>
                 </div>
                 <!-- operation button -->
                 <div v-if="user.id!=myUserId" class="dropdown col-lg-1 d-none d-lg-block">

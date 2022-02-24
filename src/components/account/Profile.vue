@@ -58,7 +58,7 @@
                   <span class="fs-5">Registered At</span>
                 </div>
                 <div class="col-6">
-                  <span class="fs-5">{{ profile.registeredAt }}</span>
+                  <span class="fs-5">{{ new Date(profile.registeredAt+'Z') }}</span>
                 </div>
               </div>
             </li>
