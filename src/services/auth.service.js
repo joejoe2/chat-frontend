@@ -15,10 +15,10 @@ function parseJwt(token) {
 class AuthService {
     login(username, password) {
         return api
-            .post('/auth/login', {
+            .post('/web/api/auth/login', {
                 username: username,
                 password: password
-            })
+            }, {withCredentials: true})
             .then(response => {
                 let info = parseJwt(response.data.access_token);
                 let user = {
@@ -27,7 +27,6 @@ class AuthService {
                     role: info.role,
                     isActive: info.isActive,
                     access_token: response.data.access_token,
-                    refresh_token: response.data.refresh_token,
                 }
                 localStorage.setItem('user', JSON.stringify(user));
                 return user;
@@ -35,7 +34,7 @@ class AuthService {
     }
 
     logout() {
-        return api.post('/auth/logout', {}, {
+        return api.post('/api/auth/logout', {}, {
             headers: authHeader()
         }).then(response => {
             if (response.status == 200) {
@@ -45,7 +44,7 @@ class AuthService {
     }
 
     register(username, password, email, verification) {
-        return api.post('/auth/register', {
+        return api.post('/api/auth/register', {
             username: username,
             email: email,
             password: password,
@@ -53,11 +52,9 @@ class AuthService {
         });
     }
 
-    refresh(user) {
+    refresh() {
         return axios
-            .post(api.defaults.baseURL + '/auth/refresh', {
-                token: user.refresh_token,
-            }, api.defaults.headers)
+            .post(api.defaults.baseURL + '/web/api/auth/refresh', {}, {withCredentials: true})
             .then(response => {
                 let info = parseJwt(response.data.access_token);
                 let user = {
@@ -66,7 +63,6 @@ class AuthService {
                     role: info.role,
                     isActive: info.isActive,
                     access_token: response.data.access_token,
-                    refresh_token: response.data.refresh_token,
                 }
                 localStorage.setItem('user', JSON.stringify(user));
                 return user;
@@ -77,7 +73,7 @@ class AuthService {
     }
 
     issueVerificationCode(email){
-        return api.post('/auth/issueVerificationCode', {
+        return api.post('/api/auth/issueVerificationCode', {
             email: email,
         }).then(response => {
             return response.data.key;
@@ -85,7 +81,7 @@ class AuthService {
     }
 
     changePassword(oldPassword, newPassword){
-        return api.post('/auth/changePassword', {
+        return api.post('/api/auth/changePassword', {
             oldPassword: oldPassword,
             newPassword: newPassword,
         }, {headers: authHeader()})
@@ -98,7 +94,7 @@ class AuthService {
     }
 
     forgetPassword(email){
-        return api.post('/auth/forgetPassword', {
+        return api.post('/api/auth/forgetPassword', {
             email: email,
         })
         .then(response => {
@@ -107,7 +103,7 @@ class AuthService {
     }
 
     resetPassword(token, newPassword){
-        return api.post('/auth/resetPassword', {
+        return api.post('/api/auth/resetPassword', {
             token: token,
             newPassword: newPassword,
         })

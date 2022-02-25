@@ -5,8 +5,9 @@ import authHeader from "./auth-header"
 
 const instance = axios.create({
     baseURL: process.env.VUE_APP_API_URL,
-    headers: { 'Content-Type': 'application/json' },
+    headers: {'Content-Type': 'application/json' },
     timeout: 10000,
+    //withCredentials: true, // for http only cookie
 });
 
 instance.interceptors.request.use(

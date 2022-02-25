@@ -17,7 +17,7 @@ export const auth = {
                 }).catch(error => {
                     context.commit('loginFailure');
                     if (error.response && error.response.status == 400) {
-                        error.message = "Incorrect username or password !"
+                        error.message = "Incorrect username or password !";
                     } else if (error.response && error.response.data) {
                         error.message = error.response.data.message || "Unknown error, please try again later !";
                     } else {
@@ -33,7 +33,7 @@ export const auth = {
             }).catch(error => {
                 context.commit('logoutSuccess');
                 if (error.response && error.response.status == 400) {
-                    error.message = "Invalid token !"
+                    error.message = "Invalid token !";
                 } else if (error.response && error.response.data) {
                     error.message = error.response.data.message || "Unknown error, please try again later !";
                 } else {
@@ -62,14 +62,14 @@ export const auth = {
             );
         },
         refresh(context) {
-            return AuthService.refresh(context.state.user).then(
+            return AuthService.refresh().then(
                 user => {
                     context.commit('refreshSuccess', user);
                     return Promise.resolve(user);
                 }).catch(error => {
                     context.commit('refreshFailure');
                     if (error.response && error.response.status == 400) {
-                        error.message = "Invalid token !"
+                        error.message = "Invalid token !";
                     } else if (error.response && error.response.data) {
                         error.message = error.response.data.message || "Unknown error, please try again later !";
                     } else {
