@@ -15,6 +15,20 @@ class AdminService {
                 return response;
             });
     }
+
+    activateUser(userId){
+        return api.post('/api/admin/activateUser', { id: userId }, { headers: authHeader() })
+            .then(response => {
+                return response;
+            });
+    }
+
+    deactivateUser(userId){
+        return api.post('/api/admin/deactivateUser', { id: userId }, { headers: authHeader() })
+            .then(response => {
+                return response;
+            });
+    }
 }
 
 export default new AdminService();

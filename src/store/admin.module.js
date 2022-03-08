@@ -33,7 +33,37 @@ export const admin = {
                 }
                 return Promise.reject(error);
             });
-        }
+        },
+        activateUser(context, payload) {
+            return adminService.activateUser(payload.id).then((response) => {
+                return response;
+            }).catch(error => {
+                if (error.response && error.response.status == 400) {
+                    error.errors = error.response.data.errors;
+                    error.message = error.response.data.message || "";
+                } else if (error.response && error.response.data) {
+                    error.message = error.response.data.message || "Unknown error, please try again later !";
+                } else {
+                    error.message = "Unknown error, please try again later !";
+                }
+                return Promise.reject(error);
+            });
+        },
+        deactivateUser(context, payload) {
+            return adminService.deactivateUser(payload.id).then((response) => {
+                return response;
+            }).catch(error => {
+                if (error.response && error.response.status == 400) {
+                    error.errors = error.response.data.errors;
+                    error.message = error.response.data.message || "";
+                } else if (error.response && error.response.data) {
+                    error.message = error.response.data.message || "Unknown error, please try again later !";
+                } else {
+                    error.message = "Unknown error, please try again later !";
+                }
+                return Promise.reject(error);
+            });
+        },
     },
     mutations: {}
 }

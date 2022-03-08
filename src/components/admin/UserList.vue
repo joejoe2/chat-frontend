@@ -73,6 +73,9 @@
                     <li><a v-if="user.role!='ADMIN'" class="dropdown-item" v-on:click="changeRoleOf(user.id, 'ADMIN')" >Change to ADMIN</a></li>
                     <li><a v-if="user.role!='STAFF'" class="dropdown-item" v-on:click="changeRoleOf(user.id, 'STAFF')" >Change to STAFF</a></li>
                     <li><a v-if="user.role!='NORMAL'" class="dropdown-item" v-on:click="changeRoleOf(user.id, 'NORMAL')" >Change to NORMAL</a></li>
+
+                    <li><a v-if="user.isActive" class="dropdown-item text-danger" v-on:click="setUserActive(user.id, false)" >Deactivate</a></li>
+                    <li><a v-if="!user.isActive" class="dropdown-item text-danger" v-on:click="setUserActive(user.id, true)" >Activate</a></li>
                   </ul>
                 </div>
               </div>
@@ -158,7 +161,20 @@ export default {
         .catch((error) => {
           alert(error.errors || error.message);
         });
-    }
+    },
+    setUserActive(userId, isActive){
+      store
+        .dispatch(isActive?"admin/activateUser":"admin/deactivateUser", {
+          id: userId,
+        })
+        .then(() => {
+          //refresh user list
+          this.getUserList(this.userList.currentPage, this.userList.pageSize);
+        })
+        .catch((error) => {
+          alert(error.errors || error.message);
+        });
+    },
   },
   computed: {
     /*
