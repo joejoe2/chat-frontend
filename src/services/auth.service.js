@@ -40,6 +40,9 @@ class AuthService {
             if (response.status == 200) {
                 localStorage.removeItem('user');
             }
+        }).catch((error)=>{
+            localStorage.removeItem('user');
+            return error;
         });
     }
 

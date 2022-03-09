@@ -77,6 +77,7 @@ export default {
           } else {
             console.log(error);
           }
+          this.$router.push({ name: "Login" });
         });
     },
     toProfile() {
