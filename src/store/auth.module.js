@@ -17,7 +17,7 @@ export const auth = {
                 }).catch(error => {
                     context.commit('loginFailure');
                     if (error.response && error.response.status == 400) {
-                        error.message = "Incorrect username or password !";
+                        error.message = error.response.data.message || "Incorrect username or password !";
                     } else if (error.response && error.response.data) {
                         error.message = error.response.data.message || "Unknown error, please try again later !";
                     } else {
