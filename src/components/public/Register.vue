@@ -163,7 +163,6 @@ export default {
             this.errorMsg = error.message;
           } else {
             this.errorMsg = "";
-            console.log(error);
           }
         })
         .finally(() => {

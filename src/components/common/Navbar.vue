@@ -35,11 +35,17 @@
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              Dropdown
+              Menu
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li>
                 <a class="dropdown-item" v-on:click="toProfile">Profile</a>
+              </li>
+              <li>
+                <a class="dropdown-item" v-on:click="toPublicChat">Public Chat (Beta)</a>
+              </li>
+              <li>
+                <a class="dropdown-item" v-on:click="toPrivateChat">Private Chat (Beta)</a>
               </li>
               <li v-if="isAdmin">
                 <a class="dropdown-item" v-on:click="toAdmin">Admin</a>
@@ -91,6 +97,12 @@ export default {
     },
     toPasswordChange(){
       this.$router.push({name: "PasswordChange"});
+    },
+    toPublicChat(){
+      this.$router.push({name: "PublicChannel"});
+    },
+    toPrivateChat(){
+      this.$router.push({name: "PrivateChannel"});
     },
   },
   computed: {

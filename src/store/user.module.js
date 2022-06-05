@@ -17,7 +17,7 @@ export const user = {
                 context.commit('setProfile', profile);
                 return Promise.resolve(profile);
             }).catch(error => {
-                if (error.response && error.response.status == 400) {
+                if (error.response && error.response.status/100 == 4) {
                     error.errors = error.response.data.errors;
                     error.message = error.response.data.message || "";
                 } else if (error.response && error.response.data) {

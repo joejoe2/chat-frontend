@@ -83,24 +83,8 @@
           </template>
         </ul>
 
-        <nav aria-label="Page navigation UserList">
-          <ul class="pagination justify-content-center">
-            <li class="page-item">
-              <a v-if="userList.currentPage>0" class="page-link" v-on:click="getUserList(userList.currentPage-1, userList.pageSize)">Previous</a>
-            </li>
-            <template v-for="pageNum in userList.totalPages" v-bind:key="pageNum">
-                <li v-if="pageNum-1==userList.currentPage" class="page-item active">
-                    <a class="page-link">{{ pageNum }}</a>
-                </li>
-                <li v-else class="page-item">
-                    <a class="page-link" v-on:click="getUserList(pageNum-1, userList.pageSize)">{{ pageNum }}</a>
-                </li>
-            </template>
-            <li class="page-item">
-                <a v-if="userList.currentPage<userList.totalPages-1" class="page-link" v-on:click="getUserList(userList.currentPage+1, userList.pageSize)">Next</a>
-            </li>
-          </ul>
-        </nav>
+        <PageNavigation :currentPage="userList.currentPage" :totalPages="userList.totalPages"
+         v-on:onPageChanged="updateUserList"></PageNavigation>
       </div>
     </div>
   </div>
@@ -110,14 +94,15 @@
 import store from "../../store/index";
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
+import PageNavigation from '../common/PageNavigation.vue';
 
 export default {
   name: "UserList",
   components:{
     Loading,
+    PageNavigation,
   },
   created() {
-    this.isLoading=true;
     this.getUserList(this.userList.currentPage, this.userList.pageSize);
   },
   data() {
@@ -134,6 +119,7 @@ export default {
   },
   methods: {
     getUserList(page, size) {
+      this.isLoading=true;
       store
         .dispatch("admin/getUserList", {
           page: page,
@@ -147,6 +133,10 @@ export default {
         }).finally(()=>{
           this.isLoading=false;
         });
+    },
+    updateUserList(pageNum){
+      //refresh user list
+      this.getUserList(pageNum, this.userList.pageSize);
     },
     changeRoleOf(userId, toRole){
       store

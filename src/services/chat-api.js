@@ -4,10 +4,9 @@ import router from "../router";
 import authHeader from "./auth-header"
 
 const instance = axios.create({
-    baseURL: process.env.VUE_APP_API_URL,
-    headers: { 'Content-Type': 'application/json' },
+    baseURL: process.env.VUE_APP_CHAT_API_URL,
+    headers: {'Content-Type': 'application/json' },
     timeout: 10000,
-    //withCredentials: true, // for http only cookie
 });
 
 instance.interceptors.request.use(
@@ -46,17 +45,17 @@ instance.interceptors.response.use(
                     }
                 });
 
-            if (success && locked) {
-                return instance(error.config);
-            }else if(!locked){
-                //sleep 1 sec
-                await new Promise(r => setTimeout(r, 1000));
-                error.config.headers = authHeader();
-                return instance(error.config);
-            }else {
-                router.push({ name: "Login" });
-            }
-        } else {
+                if (success && locked) {
+                    return instance(error.config);
+                }else if(!locked){
+                    //sleep 1 sec
+                    await new Promise(r => setTimeout(r, 1000));
+                    error.config.headers = authHeader();
+                    return instance(error.config);
+                }else {
+                    router.push({ name: "Login" });
+                }
+        }else{
             return Promise.reject(error);
         }
     }

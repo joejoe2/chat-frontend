@@ -16,7 +16,7 @@ export const auth = {
                     return Promise.resolve(user);
                 }).catch(error => {
                     context.commit('loginFailure');
-                    if (error.response && error.response.status == 400) {
+                    if (error.response && error.response.status/100 == 4) {
                         error.message = error.response.data.message || "Incorrect username or password !";
                     } else if (error.response && error.response.data) {
                         error.message = error.response.data.message || "Unknown error, please try again later !";
@@ -32,7 +32,7 @@ export const auth = {
                 return Promise.resolve(data);
             }).catch(error => {
                 context.commit('logoutSuccess');
-                if (error.response && error.response.status == 400) {
+                if (error.response && error.response.status/100 == 4) {
                     error.message = "Invalid token !";
                 } else if (error.response && error.response.data) {
                     error.message = error.response.data.message || "Unknown error, please try again later !";
@@ -49,7 +49,7 @@ export const auth = {
                     return Promise.resolve(response.data);
                 },
                 error => {
-                    if (error.response && error.response.status == 400) {
+                    if (error.response && error.response.status/100 == 4) {
                         error.errors = error.response.data.errors;
                         error.message = error.response.data.message || "";
                     } else if (error.response && error.response.data) {
@@ -68,7 +68,7 @@ export const auth = {
                     return Promise.resolve(user);
                 }).catch(error => {
                     context.commit('refreshFailure');
-                    if (error.response && error.response.status == 400) {
+                    if (error.response && error.response.status/100 == 4) {
                         error.message = "Invalid token !";
                     } else if (error.response && error.response.data) {
                         error.message = error.response.data.message || "Unknown error, please try again later !";
@@ -84,7 +84,7 @@ export const auth = {
                     return Promise.resolve(verificationKey);
                 }).catch(
                     error => {
-                        if (error.response && error.response.status == 400) {
+                        if (error.response && error.response.status/100 == 4) {
                             error.errors = error.response.data.errors;
                             error.message = error.response.data.message || "";
                         } else if (error.response && error.response.data) {
@@ -100,7 +100,7 @@ export const auth = {
                 context.commit('logoutSuccess');
                 return Promise.resolve("Your password is successfully changed !");
             }).catch(error => {
-                if (error.response && error.response.status == 400) {
+                if (error.response && error.response.status/100 == 4) {
                     error.errors = error.response.data.errors;
                     error.message = error.response.data.message || "";
                 } else if (error.response && error.response.data) {
@@ -115,7 +115,7 @@ export const auth = {
             return AuthService.forgetPassword(payload.email).then(() => {
                 return Promise.resolve("The password reset link is sent to your email !");
             }).catch(error => {
-                if (error.response && error.response.status == 400) {
+                if (error.response && error.response.status/100 == 4) {
                     error.errors = error.response.data.errors;
                     error.message = error.response.data.message || "";
                 } else if (error.response && error.response.data) {
@@ -130,7 +130,7 @@ export const auth = {
             return AuthService.resetPassword(payload.token, payload.newPassword).then(() => {
                 return Promise.resolve("Your password is successfully reset !");
             }).catch(error => {
-                if (error.response && error.response.status == 400) {
+                if (error.response && error.response.status/100 == 4) {
                     error.errors = error.response.data.errors;
                     error.message = error.response.data.message || "";
                 } else if (error.response && error.response.data) {

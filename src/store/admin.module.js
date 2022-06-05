@@ -8,7 +8,7 @@ export const admin = {
             return adminService.getUserList(pageParams.page, pageParams.size).then(userList => {
                 return Promise.resolve(userList);
             }).catch(error => {
-                if (error.response && error.response.status == 400) {
+                if (error.response && error.response.status/100 == 4) {
                     error.errors = error.response.data.errors;
                     error.message = error.response.data.message || "";
                 } else if (error.response && error.response.data) {
@@ -23,7 +23,7 @@ export const admin = {
             return adminService.changeRoleOf(payload.id, payload.role).then((response) => {
                 return response;
             }).catch(error => {
-                if (error.response && error.response.status == 400) {
+                if (error.response && error.response.status/100 == 4) {
                     error.errors = error.response.data.errors;
                     error.message = error.response.data.message || "";
                 } else if (error.response && error.response.data) {
@@ -38,7 +38,7 @@ export const admin = {
             return adminService.activateUser(payload.id).then((response) => {
                 return response;
             }).catch(error => {
-                if (error.response && error.response.status == 400) {
+                if (error.response && error.response.status/100 == 4) {
                     error.errors = error.response.data.errors;
                     error.message = error.response.data.message || "";
                 } else if (error.response && error.response.data) {
@@ -53,7 +53,7 @@ export const admin = {
             return adminService.deactivateUser(payload.id).then((response) => {
                 return response;
             }).catch(error => {
-                if (error.response && error.response.status == 400) {
+                if (error.response && error.response.status/100 == 4) {
                     error.errors = error.response.data.errors;
                     error.message = error.response.data.message || "";
                 } else if (error.response && error.response.data) {

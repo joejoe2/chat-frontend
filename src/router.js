@@ -8,8 +8,20 @@ import Admin from './components/admin/Admin.vue';
 import PasswordChange from './components/account/PasswordChange.vue';
 import ForgetPassword from './components/public/ForgetPassword.vue';
 import ResetPassword from './components/public/ResetPassword.vue';
+import PublicChannel from './components/chat/public/PublicChannel.vue';
+import PrivateChannel from './components/chat/private/PrivateChannel.vue';
 
 const routes = [
+  {
+    path: "/channel/private",
+    name: "PrivateChannel",
+    component: PrivateChannel,
+  },
+  {
+    path: "/channel/public",
+    name: "PublicChannel",
+    component: PublicChannel,
+  },
   {
     path: "/profile",
     name: "Profile",
