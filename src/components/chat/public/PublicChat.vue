@@ -212,6 +212,7 @@ export default {
             }
           };
           this.eventSource.onerror = () => {
+            this.refreshMessages(this.lastConnect);
             this.eventSource.close();
             this.subscribe();
           };

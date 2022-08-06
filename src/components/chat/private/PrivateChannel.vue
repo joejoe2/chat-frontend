@@ -241,6 +241,7 @@ export default {
             this.onMessages(Array.isArray(res) ? res : [res]);
           };
           this.eventSource.onerror = () => {
+            this.refreshMessages(this.lastConnect);
             this.eventSource.close();
             this.subscribe();
           };
