@@ -87,11 +87,11 @@ export default {
     PrivateChat,
   },
   created() {
-    this.getPrivateChannelList();
+    this.getPrivateChannelList(0);
   },
   data() {
     return {
-      channels: [],
+      channels: new Map(),
       eventSource: {},
       lastConnect: moment().utc().format("YYYY-MM-DDTHH:mm:ssZ"),
       messages: new Map(),
@@ -100,28 +100,34 @@ export default {
       isLoading: false,
       errors: {},
       errorMsg: "",
+      pageSize: 10,
     };
   },
   methods: {
-    getPrivateChannelList() {
+    getPrivateChannelList(page = 0) {
       this.isLoading = true;
       store
-        .dispatch("chat/getPrivateChannelList")
-        .then((channelList) => {
-          for (let channel of channelList.channels) {
+        .dispatch("chat/getPrivateChannelList", {
+          page: page,
+          size: this.pageSize,
+        })
+        .then((res) => {
+          for (let channel of res.channels) {
             channel.updateAt = moment(new Date(channel.updateAt));
             if (!this.messages.get(channel.id))
               this.messages.set(channel.id, new Map());
+            this.channels.set(channel.id, channel);
           }
-          this.channels = channelList.channels;
-          this.getAllMessages();
-          this.subscribe();
+          if (res.hasNext) this.getPrivateChannelList(page + 1);
+          else {
+            this.isLoading = false;
+            this.getAllMessages();
+          }
         })
         .catch((error) => {
           console.log(error);
-        })
-        .finally(() => {
           this.isLoading = false;
+          this.getAllMessages();
         });
     },
     createPrivateChannel(chatWith) {
@@ -150,30 +156,37 @@ export default {
     clearselectChannel() {
       this.selectedChannel = {};
     },
-    getAllMessages() {
-      this.isLoading = true;
+    getAllMessages(page = 0) {
       store
-        .dispatch("chat/getPrivateChannelMessagesOfUser")
-        .then((msgs) => {
-          this.onMessages(msgs);
+        .dispatch("chat/getPrivateChannelMessagesOfUser", {
+          page: page,
+          size: this.pageSize,
+        })
+        .then((res) => {
+          this.onMessages(res.messages);
+          if (res.hasNext) this.getAllMessages(page + 1);
+          else {
+            this.subscribe();
+          }
         })
         .catch((error) => {
           console.log(error);
-        })
-        .finally(() => {
-          this.isLoading = false;
+          this.subscribe();
         });
     },
-    refreshMessages(from = null) {
+    refreshMessages(from = null, page = 0) {
       let since =
         from ||
         moment().utc().subtract(240, "seconds").format("YYYY-MM-DDTHH:mm:ssZ");
       store
         .dispatch("chat/getPrivateChannelMessagesOfUserSince", {
           since: since,
+          page: page,
+          size: this.pageSize,
         })
-        .then((msgs) => {
-          this.onMessages(msgs);
+        .then((res) => {
+          this.onMessages(res.messages);
+          if (res.hasNext) this.refreshMessages(since, page + 1);
         })
         .catch((error) => {
           console.log(error);
@@ -183,17 +196,31 @@ export default {
       for (let msg of msgs) {
         msg.createAt = moment(new Date(msg.createAt));
         msg.updateAt = moment(new Date(msg.updateAt));
-
+        //if not in chnnel list
         if (!this.messages.get(msg.channel))
           this.messages.set(msg.channel, new Map());
+        //replace old msg if newer version of same msg
         let msgsOfChannel = this.messages.get(msg.channel);
         let old = msgsOfChannel.get(msg.id);
         if (!old || (old && old.version < msg.version)) {
           msgsOfChannel.set(msg.id, msg);
         }
-        let channel = this.channels.find((ch) => ch.id == msg.channel);
-        //if channel==null, fetch channel info from server
-        if (channel && channel.updateAt < msg.updateAt) {
+        let channel = this.channels.get(msg.channel);
+        //if channel==null, need to fetch channel info from server
+        //update channel info
+        if (!channel) {
+          store
+            .dispatch("chat/getPrivateChannelProfile", {
+              channelId: msg.channel,
+            })
+            .then((channel) => {
+              channel.updateAt = moment(new Date(channel.updateAt));
+              this.channels.set(channel.id, channel);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else if (channel.updateAt < msg.updateAt) {
           channel.updateAt = msg.updateAt;
         }
       }
@@ -222,7 +249,9 @@ export default {
   },
   computed: {
     channelList() {
-      return [...this.channels].sort((a, b) => b.updateAt - a.updateAt);
+      return [...this.channels.values()].sort(
+        (a, b) => b.updateAt - a.updateAt
+      );
     },
     messagList() {
       return [...this.messages.get(this.selectedChannel.id).values()].sort(

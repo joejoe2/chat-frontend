@@ -58,7 +58,7 @@
                   <span class="fs-5">Registered At</span>
                 </div>
                 <div class="col-6">
-                  <span class="fs-5">{{ new Date(profile.registeredAt) }}</span>
+                  <span class="fs-5">{{ profile.registeredAt }}</span>
                 </div>
               </div>
             </li>
@@ -73,6 +73,7 @@
 import store from "../../store/index";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
+import moment from "moment";
 
 export default {
   name: "Profile",
@@ -94,6 +95,7 @@ export default {
       store
         .dispatch("user/getProfile")
         .then((profile) => {
+          profile.registeredAt = moment(new Date(profile.registeredAt));
           this.profile = profile;
         })
         .catch((error) => {

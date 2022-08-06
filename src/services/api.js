@@ -2,6 +2,7 @@ import axios from "axios";
 import store from "../store/index"
 import router from "../router";
 import authHeader from "./auth-header"
+import Qs from 'qs';
 
 const instance = axios.create({
     baseURL: process.env.VUE_APP_API_URL,
@@ -12,6 +13,12 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
     (config) => {
+        config.paramsSerializer = params => {
+            return Qs.stringify(params, {
+                arrayFormat: "brackets",
+                encode: false
+            });
+        };
         return config;
     },
     (error) => {

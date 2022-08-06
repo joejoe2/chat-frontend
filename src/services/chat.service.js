@@ -4,7 +4,7 @@ import authHeader from './auth-header';
 class ChatService {
     //public channel
     getPublicChannelList(page, size) {
-        return api.post('/api/channel/public/list', { page: page, size: size }, { headers: authHeader() })
+        return api.get('/api/channel/public/list', { headers: authHeader(), params: { page: page, size: size } })
             .then(response => {
                 return response.data;
             });
@@ -18,16 +18,16 @@ class ChatService {
     }
 
     getAllPublicChannelMessages(channelId, page, size) {
-        return api.post('/api/channel/public/getAllMessages',
-            { channelId: channelId, page: page, size: size }, { headers: authHeader() })
+        return api.get('/api/channel/public/getAllMessages',
+            { headers: authHeader(), params: { channelId: channelId, pageRequest: { page: page, size: size } } })
             .then(response => {
                 return response.data;
             });
     }
 
     getPublicChannelMessagesSince(channelId, since, page, size) {
-        return api.post('/api/channel/public/getMessagesSince',
-            { channelId: channelId, since: since, page: page, size: size }, { headers: authHeader() })
+        return api.get('/api/channel/public/getMessagesSince',
+            { headers: authHeader(), params: { channelId: channelId, since: since, pageRequest: { page: page, size: size } } })
             .then(response => {
                 return response.data;
             });
@@ -43,13 +43,20 @@ class ChatService {
     subscibeToPublicChannel(channelId) {
         return new EventSource(
             api.defaults.baseURL + '/api/channel/public/subscribe?channelId=' + channelId +
-            "&access_token=" + encodeURIComponent(JSON.parse(localStorage.getItem("user")).access_token)
+            "&access_token=" + encodeURIComponent((JSON.parse(localStorage.getItem("user")) || {}).access_token || '')
         );
     }
 
     //private channel
-    getPrivateChannelList() {
-        return api.post('/api/channel/private/list', {}, { headers: authHeader() })
+    getPrivateChannelProfile(channelId) {
+        return api.get('/api/channel/private/profile', { headers: authHeader(), params: { channelId: channelId } })
+            .then(response => {
+                return response.data;
+            });
+    }
+
+    getPrivateChannelList(page, size) {
+        return api.get('/api/channel/private/list', { headers: authHeader(), params: { page: page, size: size } })
             .then(response => {
                 return response.data;
             });
@@ -62,15 +69,16 @@ class ChatService {
             });
     }
 
-    getAllPrivateChannelMessages() {
-        return api.post('/api/channel/private/getAllMessages', {}, { headers: authHeader() })
+    getAllPrivateChannelMessages(page, size) {
+        return api.get('/api/channel/private/getAllMessages', { headers: authHeader(), params: { page: page, size: size } })
             .then(response => {
                 return response.data;
             });
     }
 
-    getPrivateChannelMessagesSince(since) {
-        return api.post('/api/channel/private/getMessagesSince', { since: since }, { headers: authHeader() })
+    getPrivateChannelMessagesSince(since, page, size) {
+        return api.get('/api/channel/private/getMessagesSince',
+            { headers: authHeader(), params: { since: since, pageRequest: { page: page, size: size } } })
             .then(response => {
                 return response.data;
             });
@@ -83,11 +91,10 @@ class ChatService {
             });
     }
 
-    subscibeToPrivateChannel(lastConnect) {
+    subscibeToPrivateChannel() {
         return new EventSource(
-            api.defaults.baseURL + '/api/channel/private/subscribe?' +
-            "lastConnect=" + encodeURIComponent(lastConnect) +
-            "&access_token=" + encodeURIComponent(JSON.parse(localStorage.getItem("user")).access_token)
+            api.defaults.baseURL + '/api/channel/private/subscribe?access_token='
+            + encodeURIComponent((JSON.parse(localStorage.getItem("user")) || {}).access_token || '')
         );
     }
 }

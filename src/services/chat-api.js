@@ -2,15 +2,22 @@ import axios from "axios";
 import store from "../store/index"
 import router from "../router";
 import authHeader from "./auth-header"
+import Qs from 'qs';
 
 const instance = axios.create({
     baseURL: process.env.VUE_APP_CHAT_API_URL,
-    headers: {'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json' },
     timeout: 10000,
 });
 
 instance.interceptors.request.use(
     (config) => {
+        config.paramsSerializer = params => {
+            return Qs.stringify(params, {
+                arrayFormat: "brackets",
+                allowDots: true,
+            });
+        };
         return config;
     },
     (error) => {
@@ -45,17 +52,17 @@ instance.interceptors.response.use(
                     }
                 });
 
-                if (success && locked) {
-                    return instance(error.config);
-                }else if(!locked){
-                    //sleep 1 sec
-                    await new Promise(r => setTimeout(r, 1000));
-                    error.config.headers = authHeader();
-                    return instance(error.config);
-                }else {
-                    router.push({ name: "Login" });
-                }
-        }else{
+            if (success && locked) {
+                return instance(error.config);
+            } else if (!locked) {
+                //sleep 1 sec
+                await new Promise(r => setTimeout(r, 1000));
+                error.config.headers = authHeader();
+                return instance(error.config);
+            } else {
+                router.push({ name: "Login" });
+            }
+        } else {
             return Promise.reject(error);
         }
     }

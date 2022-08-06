@@ -85,8 +85,8 @@ export default {
       required: true,
     },
   },
-  created(){
-      
+  mounted(){
+    setTimeout(()=>this.scrollToBottom(), 100);
   },
   data() {
     return {
@@ -102,8 +102,11 @@ export default {
       this.autoScrollToBottom = true;
     },
     onScroll(details) {
-      if (this.autoScrollToBottom && details.index < this.messagList.length)
+      if (this.autoScrollToBottom && details.direction == 'decrease'){
         this.autoScrollToBottom = false;
+      }else if(!this.autoScrollToBottom && details.index == details.to){
+        this.autoScrollToBottom = true;
+      }
     },
     sendMessage(message) {
       store
@@ -141,6 +144,7 @@ export default {
       this.autoScrollToBottom = true;
       this.errors = {};
       this.errorMsg = "";
+      setTimeout(()=>this.scrollToBottom(), 100);
     },
   },
 };

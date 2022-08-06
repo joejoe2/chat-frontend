@@ -1,5 +1,5 @@
 import api from './api';
-import axios from 'axios';
+//import axios from 'axios';
 import authHeader from './auth-header';
 
 function parseJwt(token) {
@@ -56,8 +56,8 @@ class AuthService {
     }
 
     refresh() {
-        return axios
-            .post(api.defaults.baseURL + '/web/api/auth/refresh', {}, {withCredentials: true})
+        return api
+            .post('/web/api/auth/refresh', {}, {withCredentials: true})
             .then(response => {
                 let info = parseJwt(response.data.access_token);
                 let user = {

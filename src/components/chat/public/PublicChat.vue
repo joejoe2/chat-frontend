@@ -1,5 +1,12 @@
 <template>
   <div class="card w-50 h-100 mb-4">
+    <loading
+        v-model:active="isLoading"
+        :can-cancel="false"
+        :is-full-page="true"
+        :loader="'dots'"
+      />
+    
     <div class="card-body h-100">
       <q-virtual-scroll
         style="max-height: 100%; overflow-x: hidden"
@@ -68,18 +75,21 @@
 
 <script>
 import store from "../../../store/index";
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
 import moment from "moment";
 import { QChatMessage, QVirtualScroll } from "quasar";
 
 export default {
   name: "PublicChat",
   components: {
+    Loading,
     QChatMessage,
     QVirtualScroll,
   },
   created() {
+    this.isLoading = true;
     this.getAllMessages();
-    this.subscribe();
   },
   props: {
     channelId: {
@@ -89,6 +99,7 @@ export default {
   },
   data() {
     return {
+      isLoading: false,
       eventSource: {},
       messages: new Map(),
       pageSize: 10,
@@ -110,12 +121,17 @@ export default {
         .then((res) => {
           this.onMessages(res.messages);
           if (res.hasNext) this.getAllMessages(page + 1);
+          else {
+            setTimeout(()=>this.scrollToBottom(), 100);
+            this.isLoading = false;
+            this.subscribe();
+          }
         })
         .catch((error) => {
           console.log(error);
-        })
-        .finally(() => {
-          this.scrollToBottom();
+          setTimeout(()=>this.scrollToBottom(), 100);
+          this.isLoading = false;
+          this.subscribe();
         });
     },
     refreshMessages(from = null, page = 0) {
@@ -154,7 +170,6 @@ export default {
           message: message,
         })
         .then(() => {
-          //success
           this.scrollToBottom();
         })
         .catch((error) => {
@@ -169,12 +184,15 @@ export default {
         });
     },
     scrollToBottom() {
-      this.$refs.scroller.scrollTo(this.messagList.length, "start-force");
+      this.$refs.scroller.scrollTo(this.messagList.length-1, "start-force");
       this.autoScrollToBottom = true;
     },
     onScroll(details) {
-      if (this.autoScrollToBottom && details.index < this.messagList.length)
+      if (this.autoScrollToBottom && details.direction == 'decrease'){
         this.autoScrollToBottom = false;
+      }else if(!this.autoScrollToBottom && details.index == details.to){
+        this.autoScrollToBottom = true;
+      }
     },
     subscribe() {
       store
@@ -184,7 +202,6 @@ export default {
         .then((eventSource) => {
           this.eventSource = eventSource;
           this.eventSource.onopen = () => {
-            console.log("connect to sse");
             this.refreshMessages(this.lastConnect);
             this.lastConnect = moment().utc().format("YYYY-MM-DDTHH:mm:ssZ");
           };

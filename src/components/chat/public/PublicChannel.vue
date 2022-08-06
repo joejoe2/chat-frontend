@@ -7,7 +7,7 @@
     back
   </button>
 
-  <div class="row justify-content-center mt-3" style="height:65vh;">
+  <div class="row justify-content-center mt-3" style="height: 65vh">
     <PublicChat
       v-if="!selectedChannelId == ''"
       :channelId="selectedChannelId"

@@ -63,7 +63,8 @@ const routes = [
     component: Admin,
   },
   //for 404
-  { path: '/:pathMatch(.*)*',
+  {
+    path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: Home,
   },
@@ -75,7 +76,7 @@ const router = createRouter({
 });
 
 router.afterEach((to) => {
-  if(to.name=="NotFound"){
+  if (to.name == "NotFound") {
     router.replace({ name: "Home" });
   }
 

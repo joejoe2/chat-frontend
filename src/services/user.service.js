@@ -3,9 +3,9 @@ import authHeader from './auth-header';
 
 class UserService {
   getProfile() {
-    return api.post('/api/user/profile', {}, { headers: authHeader() })
+    return api.get('/api/user/profile', { headers: authHeader() })
       .then(response => {
-        return response.data.profile;
+        return response.data;
       });
   }
 }

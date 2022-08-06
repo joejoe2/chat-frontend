@@ -1,7 +1,7 @@
 import chatService from "../services/chat.service";
 
 function parseError(error) {
-    if (error.response && error.response.status == 400) {
+    if (error.response && error.response.status / 100 == 4) {
         error.errors = error.response.data.errors;
         error.message = error.response.data.message || "";
     } else if (error.response && error.response.data) {
@@ -58,8 +58,15 @@ export const chat = {
             return Promise.resolve(chatService.subscibeToPublicChannel(payload.channelId));
         },
         //private chat
-        getPrivateChannelList() {
-            return chatService.getPrivateChannelList().then(res => {
+        getPrivateChannelProfile(context, payload) {
+            return chatService.getPrivateChannelProfile(payload.channelId).then(res => {
+                return Promise.resolve(res);
+            }).catch(error => {
+                return Promise.reject(parseError(error));
+            });
+        },
+        getPrivateChannelList(context, payload) {
+            return chatService.getPrivateChannelList(payload.page, payload.size).then(res => {
                 return Promise.resolve(res);
             }).catch(error => {
                 return Promise.reject(parseError(error));
@@ -72,15 +79,15 @@ export const chat = {
                 return Promise.reject(parseError(error));
             });
         },
-        getPrivateChannelMessagesOfUser() {
-            return chatService.getAllPrivateChannelMessages().then((response) => {
+        getPrivateChannelMessagesOfUser(context, payload) {
+            return chatService.getAllPrivateChannelMessages(payload.page, payload.size).then((response) => {
                 return response;
             }).catch(error => {
                 return Promise.reject(parseError(error));
             });
         },
         getPrivateChannelMessagesOfUserSince(context, payload) {
-            return chatService.getPrivateChannelMessagesSince(payload.since).then((response) => {
+            return chatService.getPrivateChannelMessagesSince(payload.since, payload.page, payload.size).then((response) => {
                 return response;
             }).catch(error => {
                 return Promise.reject(parseError(error));
