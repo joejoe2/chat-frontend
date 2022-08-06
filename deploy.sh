@@ -15,6 +15,6 @@ git init
 git add -A
 git commit -m 'deploy'
 # 部署到 https://github.com/joejoe2/frontend.git 分支為 gh-pages
-git push -f https://github.com/joejoe2/frontend.git chat:gh-pages
+git push -f https://github.com/joejoe2/frontend.git HEAD:gh-pages
 # 將dist資料夾中的內容推送至遠端的gh-pages分支中，並強制無條件將舊有的內容取代成目前的內容（指令 git push -f)
 cd -

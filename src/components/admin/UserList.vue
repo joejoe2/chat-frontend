@@ -62,7 +62,7 @@
                 </div>
                 <!-- User Registered At -->
                 <div class="col-lg-2 d-none d-lg-block">
-                  <span>{{ new Date(user.registeredAt+'Z') }}</span>
+                  <span>{{ moment(new Date(user.registeredAt)) }}</span>
                 </div>
                 <!-- operation button -->
                 <div v-if="user.id!=myUserId" class="dropdown col-sm-1 col-md-1 col-lg-1">
@@ -95,6 +95,7 @@ import store from "../../store/index";
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 import PageNavigation from '../common/PageNavigation.vue';
+import moment from "moment";
 
 export default {
   name: "UserList",
@@ -118,6 +119,9 @@ export default {
     };
   },
   methods: {
+    moment(obj){
+      return moment(obj);
+    },
     getUserList(page, size) {
       this.isLoading=true;
       store
