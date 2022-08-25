@@ -240,10 +240,12 @@ export default {
             let res = JSON.parse(e.data);
             this.onMessages(Array.isArray(res) ? res : [res]);
           };
-          this.eventSource.onerror = () => {
+          this.eventSource.onerror = this.eventSource.onclose = () => {
             this.refreshMessages(this.lastConnect);
-            this.eventSource.close();
-            this.subscribe();
+            if(this.eventSource) {
+              setTimeout(()=>this.subscribe(), 2000);
+              this.eventSource.close();
+            }
           };
         });
     },
@@ -265,6 +267,7 @@ export default {
   },
   beforeUnmount() {
     this.eventSource.close();
+    this.eventSource = null;
   },
 };
 </script>

@@ -23,7 +23,7 @@
             :index="index"
           >
             <QChatMessage
-              class="col-4"
+              class="col col-12 col-sm-6 col-md-4 col-lg-2"
               v-bind:name="item.from.username"
               :text="[item.content]"
               sent
@@ -37,7 +37,7 @@
             :index="index"
           >
             <QChatMessage
-              class="col-4"
+              class="col col-12 col-sm-6 col-md-4 col-lg-2"
               v-bind:name="item.from.username"
               :text="[item.content]"
               v-bind:stamp="item.createAt.format('lll')"
@@ -211,10 +211,12 @@ export default {
               this.onMessages(Array.isArray(res) ? res : [res]);
             }
           };
-          this.eventSource.onerror = () => {
+          this.eventSource.onerror = this.eventSource.onclose = () => {
             this.refreshMessages(this.lastConnect);
-            this.eventSource.close();
-            this.subscribe();
+            if(this.eventSource) {
+              setTimeout(()=>this.subscribe(), 2000);
+              this.eventSource.close();
+            }
           };
         });
     },
@@ -240,6 +242,7 @@ export default {
   },
   beforeUnmount() {
     this.eventSource.close();
+    this.eventSource = null;
   },
 };
 </script>

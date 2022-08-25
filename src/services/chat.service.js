@@ -41,8 +41,8 @@ class ChatService {
     }
 
     subscibeToPublicChannel(channelId) {
-        return new EventSource(
-            api.defaults.baseURL + '/api/channel/public/subscribe?channelId=' + channelId +
+        return new WebSocket(
+            api.defaults.baseURL.replace("http", "ws") + '/ws/channel/public/subscribe?channelId=' + channelId +
             "&access_token=" + encodeURIComponent((JSON.parse(localStorage.getItem("user")) || {}).access_token || '')
         );
     }
@@ -92,8 +92,8 @@ class ChatService {
     }
 
     subscibeToPrivateChannel() {
-        return new EventSource(
-            api.defaults.baseURL + '/api/channel/private/subscribe?access_token='
+        return new WebSocket(
+            api.defaults.baseURL.replace("http", "ws") + '/ws/channel/private/subscribe?access_token='
             + encodeURIComponent((JSON.parse(localStorage.getItem("user")) || {}).access_token || '')
         );
     }
