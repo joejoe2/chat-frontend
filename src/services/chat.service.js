@@ -36,7 +36,7 @@ class ChatService {
     sendPublicChannelMessage(channelId, message) {
         return api.post('/api/channel/public/publishMessage', { channelId: channelId, message: message }, { headers: authHeader() })
             .then(response => {
-                return response;
+                return response.data;
             });
     }
 
@@ -87,7 +87,7 @@ class ChatService {
     sendPrivateChannelMessage(channelId, message) {
         return api.post('/api/channel/private/publishMessage', { channelId: channelId, message: message }, { headers: authHeader() })
             .then(response => {
-                return response;
+                return response.data;
             });
     }
 

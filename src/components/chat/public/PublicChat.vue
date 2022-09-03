@@ -169,7 +169,8 @@ export default {
           channelId: this.channelId,
           message: message,
         })
-        .then(() => {
+        .then((msg) => {
+          this.onMessages([msg]);
           this.scrollToBottom();
         })
         .catch((error) => {
