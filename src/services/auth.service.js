@@ -35,7 +35,7 @@ class AuthService {
 
     logout() {
         return api.post('/api/auth/logout', {}, {
-            headers: authHeader()
+            headers: authHeader(), withCredentials: true,
         }).then(response => {
             if (response.status == 200) {
                 localStorage.removeItem('user');
