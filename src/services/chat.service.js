@@ -97,6 +97,72 @@ class ChatService {
             + encodeURIComponent((JSON.parse(localStorage.getItem("user")) || {}).access_token || '')
         );
     }
+    
+    //group channel
+    createGroupChannel(channelName) {
+        return api.post('/api/channel/group/create', { channelName: channelName }, { headers: authHeader() })
+            .then(response => {
+                return response;
+            });
+    }
+
+    getGroupChannelProfile(channelId) {
+        return api.get('/api/channel/group/profile', { headers: authHeader(), params: { channelId: channelId } })
+            .then(response => {
+                return response.data;
+            });
+    }
+
+    getGroupChannelList(since, page, size) {
+        return api.get('/api/channel/group/list', { headers: authHeader(), params: { since: since, pageRequest: { page: page, size: size } } })
+            .then(response => {
+                return response.data;
+            });
+    }
+
+    getGroupChannelMessagesSince(channelId, since, page, size) {
+        return api.get('/api/channel/group/getMessagesSince',
+            { headers: authHeader(), params: { channelId: channelId, since: since, pageRequest: { page: page, size: size } } })
+            .then(response => {
+                return response.data;
+            });
+    }
+
+    subscibeToGroupChannel() {
+        return new WebSocket(
+            api.defaults.baseURL.replace("http", "ws") + '/ws/channel/group/subscribe?access_token='
+            + encodeURIComponent((JSON.parse(localStorage.getItem("user")) || {}).access_token || '')
+        );
+    }
+
+    sendGroupChannelMessage(channelId, message) {
+        return api.post('/api/channel/group/publishMessage', { channelId: channelId, message: message }, { headers: authHeader() })
+            .then(response => {
+                return response.data;
+            });
+    }
+
+    inviteToGroupChannel(channelId, targetUserId){
+        return api.post('/api/channel/group/invite', { channelId: channelId, targetUserId: targetUserId }, { headers: authHeader() })
+            .then(response => {
+                return response.data;
+            });
+    }
+
+    acceptInvitationToGroupChannel(channelId){
+        return api.post('/api/channel/group/accept', { channelId: channelId }, { headers: authHeader() })
+            .then(response => {
+                return response.data;
+            });
+    }
+
+    getInvitations(since, page, size){
+        return api.get('/api/channel/group/invitation',
+            { headers: authHeader(), params: { since: since, pageRequest: { page: page, size: size } } })
+            .then(response => {
+                return response.data;
+            });
+    }
 }
 
 export default new ChatService();

@@ -101,8 +101,68 @@ export const chat = {
             });
         },
         subscibeToPrivateChannel(context, payload) {
-            return Promise.resolve(chatService.subscibeToPrivateChannel(payload.lastConnect));
+            return Promise.resolve(chatService.subscibeToPrivateChannel());
         },
+        //group chat
+        getGroupChannelProfile(context, payload) {
+            return chatService.getGroupChannelProfile(payload.channelId).then(res => {
+                return Promise.resolve(res);
+            }).catch(error => {
+                return Promise.reject(parseError(error));
+            });
+        },
+        getGroupChannelListSince(context, payload) {
+            return chatService.getGroupChannelList(payload.since, payload.page, payload.size).then(res => {
+                return Promise.resolve(res);
+            }).catch(error => {
+                return Promise.reject(parseError(error));
+            });
+        },
+        createGroupChannel(context, payload) {
+            return chatService.createGroupChannel(payload.channelName).then((response) => {
+                return response;
+            }).catch(error => {
+                return Promise.reject(parseError(error));
+            });
+        },
+        getGroupChannelMessagesSince(context, payload) {
+            return chatService.getGroupChannelMessagesSince(payload.channelId, payload.since, payload.page, payload.size).then((response) => {
+                return response;
+            }).catch(error => {
+                return Promise.reject(parseError(error));
+            });
+        },
+        sendGroupChannelMessage(context, payload) {
+            return chatService.sendGroupChannelMessage(payload.channelId, payload.message).then((response) => {
+                return response;
+            }).catch(error => {
+                return Promise.reject(parseError(error));
+            });
+        },
+        subscibeToGroupChannel(context, payload) {
+            return Promise.resolve(chatService.subscibeToGroupChannel());
+        },
+        inviteToGroupChannel(context, payload) {
+            return chatService.inviteToGroupChannel(payload.channelId, payload.targetUserId).then((response) => {
+                return response;
+            }).catch(error => {
+                return Promise.reject(parseError(error));
+            });
+        },
+        acceptInvitationToGroupChannel(context, payload) {
+            return chatService.acceptInvitationToGroupChannel(payload.channelId).then((response) => {
+                return response;
+            }).catch(error => {
+                return Promise.reject(parseError(error));
+            });
+        },
+        getInvitations(context, payload){
+            return chatService.getInvitations(payload.since, payload.page, payload.size).then((response) => {
+                return response;
+            }).catch(error => {
+                return Promise.reject(parseError(error));
+            });
+        }
     },
     mutations: {},
 };

@@ -47,6 +47,9 @@
               <li>
                 <a class="dropdown-item" v-on:click="toPrivateChat">Private Chat (Beta)</a>
               </li>
+              <li>
+                <a class="dropdown-item" v-on:click="toGroupChat">Group Chat (Beta)</a>
+              </li>
               <li v-if="isAdmin">
                 <a class="dropdown-item" v-on:click="toAdmin">Admin</a>
               </li>
@@ -103,6 +106,9 @@ export default {
     },
     toPrivateChat(){
       this.$router.push({name: "PrivateChannel"});
+    },
+    toGroupChat(){
+      this.$router.push({name: "GroupChannel"});
     },
   },
   computed: {

@@ -1,6 +1,6 @@
 <template>
   <div class="card h-100">
-    <h6>{{ chatTarget.username }}</h6>
+    <h6>{{ channelName}}</h6>
     <q-virtual-scroll
       style="max-height: 100%; overflow-x: hidden"
       ref="scroller"
@@ -26,8 +26,14 @@
                 <img class="q-message-avatar q-message-avatar--sent" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"/>
               </q-btn>
             </template>
-            <div>
+            <div v-if="item.messageType=='MESSAGE'">
               {{ item.content }}
+            </div>
+            <div v-if="item.messageType=='INVITATION'">
+              {{ 'Invite '+item.content.username+' to join.'}}
+            </div>
+            <div v-if="item.messageType=='JOIN'">
+              {{ item.from.username+' join.'}}
             </div>
           </QChatMessage>
         </div>
@@ -57,8 +63,14 @@
                 </q-popup-proxy>
               </q-btn>
             </template>
-            <div>
+            <div v-if="item.messageType=='MESSAGE'">
               {{ item.content }}
+            </div>
+            <div v-if="item.messageType=='INVITATION'">
+              {{ 'Invite '+item.content.username+' to join.'}}
+            </div>
+            <div v-if="item.messageType=='JOIN'">
+              {{ item.from.username+' join.'}}
             </div>
           </QChatMessage>
         </div>
@@ -87,6 +99,37 @@
       <button class="btn btn-success" v-on:click="sendMessage(message)">
         send
       </button>
+      <q-btn color="purple" label="Invite others">
+        <q-menu>
+          <div>
+            <label for="invite">Type user ID:</label>
+            <input
+              v-model="invitee"
+              name="invitee"
+              type="text"
+              class="form-control"
+              v-bind:class="{ 'is-invalid': errors.targetUserId }"
+            />
+            <div
+              class="invalid-feedback"
+              v-for="error in errors.targetUserId"
+              v-bind:key="error"
+            >
+              {{ error }}
+            </div>
+            <div v-if="errorMsg" class="alert alert-danger" role="alert">
+              {{ errorMsg }}
+            </div>
+              <q-btn
+                color="primary"
+                label="Invite"
+                push
+                size="sm"
+                v-on:click="invite"
+              />
+          </div>
+        </q-menu>
+      </q-btn>
     </div>
   </div>
 </template>
@@ -96,7 +139,7 @@ import store from "../../../store/index";
 import { QChatMessage, QVirtualScroll } from "quasar";
 
 export default {
-  name: "PrivateChat",
+  name: "GroupChat",
   components: {
     QChatMessage,
     QVirtualScroll,
@@ -117,6 +160,7 @@ export default {
   data() {
     return {
       message: "",
+      invitee: "",
       autoScrollToBottom: true,
       errors: {},
       errorMsg: "",
@@ -136,7 +180,7 @@ export default {
     },
     sendMessage(message) {
       store
-        .dispatch("chat/sendPrivateChannelMessage", {
+        .dispatch("chat/sendGroupChannelMessage", {
           channelId: this.channel.id,
           message: message,
         })
@@ -155,13 +199,34 @@ export default {
           }
         });
     },
+    invite(){
+      store
+        .dispatch("chat/inviteToGroupChannel", {
+          channelId: this.channel.id,
+          targetUserId: this.invitee,
+        })
+        .then(() => {
+          //success
+          this.scrollToBottom();
+        })
+        .catch((error) => {
+          if (error.errors) this.errors = error.errors;
+          else this.errors = {};
+          
+          if (error.message) {
+            this.errorMsg = error.message;
+          } else {
+            this.errorMsg = "";
+          }
+        });
+    }
   },
   computed: {
     myUserId() {
       return store.state.auth.user.id;
     },
-    chatTarget() {
-      return this.channel.members.find((m) => m.id != this.myUserId);
+    channelName() {
+      return this.channel.name;
     },
   },
   watch: {

@@ -9,8 +9,8 @@
       />
 
       <div class="card-body h-100">
-        <div class="mb-2 h-25">
-          <label for="newChannelName">chat with</label>
+        <div class="mb-2">
+          <label for="newChannelName">chat with (with user id):</label>
           <input
             v-model="chatWith"
             name="chatWith"
@@ -37,7 +37,7 @@
           </button>
         </div>
 
-        <div class="row h-75">
+        <div class="row">
           <!-- channel info-->
           <ul class="col-6 mh-100 list-group list-group-flush overflow-auto">
             <template v-for="channel in channelList" v-bind:key="channel.id">

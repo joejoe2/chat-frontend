@@ -10,6 +10,7 @@ import ForgetPassword from './components/public/ForgetPassword.vue';
 import ResetPassword from './components/public/ResetPassword.vue';
 import PublicChannel from './components/chat/public/PublicChannel.vue';
 import PrivateChannel from './components/chat/private/PrivateChannel.vue';
+import GroupChannel from './components/chat/group/GroupChannel.vue';
 
 const routes = [
   {
@@ -21,6 +22,11 @@ const routes = [
     path: "/channel/public",
     name: "PublicChannel",
     component: PublicChannel,
+  },
+  {
+    path: "/channel/group",
+    name: "GroupChannel",
+    component: GroupChannel,
   },
   {
     path: "/profile",

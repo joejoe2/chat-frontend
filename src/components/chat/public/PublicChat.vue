@@ -24,11 +24,19 @@
           >
             <QChatMessage
               class="col col-12 col-sm-6 col-md-4 col-lg-2"
-              v-bind:name="item.from.username"
-              :text="[item.content]"
+              v-bind:name="item.from.username+' (You)'"
               sent
               v-bind:stamp="item.createAt.format('lll')"
-            />
+            >
+            <template v-slot:avatar>
+              <q-btn flat>
+                <img class="q-message-avatar q-message-avatar--sent" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"/>
+              </q-btn>
+            </template>
+            <div>
+              {{ item.content }}
+            </div>
+          </QChatMessage>
           </div>
           <div
             v-else
@@ -39,9 +47,27 @@
             <QChatMessage
               class="col col-12 col-sm-6 col-md-4 col-lg-2"
               v-bind:name="item.from.username"
-              :text="[item.content]"
               v-bind:stamp="item.createAt.format('lll')"
-            />
+            >
+              <template v-slot:avatar>
+                <q-btn flat>
+                  <img class="q-message-avatar q-message-avatar--received" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"/>
+                  <q-popup-proxy>
+                    <q-card>
+                      <q-card-section>
+                        <div class="text-h6">{{ item.from.username }}</div>
+                      </q-card-section>
+                      <q-card-section>
+                        <button v-bind:value="item.from.id" onclick="navigator.clipboard.writeText(this.value)">Copy ID</button>
+                      </q-card-section>
+                    </q-card>
+                  </q-popup-proxy>
+                </q-btn>
+              </template>
+              <div>
+                {{ item.content }}
+              </div>
+            </QChatMessage>
           </div>
         </template>
       </q-virtual-scroll>
@@ -108,6 +134,7 @@ export default {
       autoScrollToBottom: true,
       errors: {},
       errorMsg: "",
+      selectedUserProfile: {},
     };
   },
   methods: {
