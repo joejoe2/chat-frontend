@@ -87,6 +87,18 @@
       <button class="btn btn-success" v-on:click="sendMessage(message)">
         send
       </button>
+      <q-btn color="secondary" label="...">
+        <q-menu auto-close fit>
+          <q-list style="min-width: 100px">
+            <q-item v-if="!isBlocked" clickable v-on:click="block(true)">
+              <q-item-section>block</q-item-section>
+            </q-item>
+            <q-item v-else clickable v-on:click="block(false)">
+              <q-item-section>unblock</q-item-section>
+            </q-item>
+          </q-list>
+        </q-menu>
+      </q-btn>
     </div>
   </div>
 </template>
@@ -155,6 +167,27 @@ export default {
           }
         });
     },
+    block(isBlocked=true){
+      console.log(isBlocked);
+      store
+        .dispatch("chat/blockPrivateChannel", {
+          channelId: this.channel.id,
+          isBlocked: isBlocked,
+        })
+        .then((res) => {
+          this.channel.isBlocked = res.isBlocked;
+        })
+        .catch((error) => {
+          if (error.errors) this.errors = error.errors;
+          else this.errors = {};
+
+          if (error.message) {
+            this.errorMsg = error.message;
+          } else {
+            this.errorMsg = "";
+          }
+        });
+    },
   },
   computed: {
     myUserId() {
@@ -163,6 +196,9 @@ export default {
     chatTarget() {
       return this.channel.members.find((m) => m.id != this.myUserId);
     },
+    isBlocked(){
+      return this.channel.isBlocked || false;
+    }
   },
   watch: {
     channel: function () {

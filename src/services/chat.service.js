@@ -97,6 +97,10 @@ class ChatService {
             + encodeURIComponent((JSON.parse(localStorage.getItem("user")) || {}).access_token || '')
         );
     }
+
+    blockPrivateChannel(channelId, isBlocked) {
+        return api.post('/api/channel/private/blockage', { channelId: channelId, isBlocked: isBlocked }, { headers: authHeader() });
+    }
     
     //group channel
     createGroupChannel(channelName) {

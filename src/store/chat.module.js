@@ -103,6 +103,17 @@ export const chat = {
         subscibeToPrivateChannel(context, payload) {
             return Promise.resolve(chatService.subscibeToPrivateChannel());
         },
+        blockPrivateChannel(context, payload) {
+            return chatService.blockPrivateChannel(payload.channelId, payload.isBlocked).then(() => {
+                return chatService.getPrivateChannelProfile(payload.channelId).then(res => {
+                    return Promise.resolve(res);
+                }).catch(error => {
+                    return Promise.reject(parseError(error));
+                });
+            }).catch(error => {
+                return Promise.reject(parseError(error));
+            });
+        },
         //group chat
         getGroupChannelProfile(context, payload) {
             return chatService.getGroupChannelProfile(payload.channelId).then(res => {
