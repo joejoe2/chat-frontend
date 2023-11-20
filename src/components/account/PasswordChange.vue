@@ -90,7 +90,7 @@ export default {
           else this.errors = {};
 
           if (error.message) this.errorMsg = error.message;
-          else this.errorMsg = "";
+          else console.log(error);
         })
         .finally(() => {
           this.isLoading = false;

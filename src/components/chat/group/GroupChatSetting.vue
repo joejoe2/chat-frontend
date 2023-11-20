@@ -77,8 +77,7 @@ export default {
             this.errorMsg = error.message;
             this.showAlert = true;
           } else {
-            this.errorMsg = "";
-            this.showAlert = false;
+            console.log(error);
           }
         });
     },
@@ -94,8 +93,7 @@ export default {
             this.errorMsg = error.message;
             this.showAlert = true;
           } else {
-            this.errorMsg = "";
-            this.showAlert = false;
+            console.log(error);
           }
         });
     },

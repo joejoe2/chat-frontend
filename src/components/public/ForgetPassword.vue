@@ -82,7 +82,7 @@ export default {
           if (error.message) {
             this.errorMsg = error.message;
           } else {
-            this.errorMsg = "";
+            console.log(error);
           }
         })
         .finally(() => {
