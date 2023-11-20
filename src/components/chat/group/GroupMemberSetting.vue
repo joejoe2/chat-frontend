@@ -148,8 +148,6 @@ export default {
                     if (error.message) {
                         this.errorMsg = error.message;
                         this.showAlert = true;
-                    } else {
-                        console.log(error);
                     }
                 });
         },
@@ -188,8 +186,6 @@ export default {
                     if (error.message) {
                         this.errorMsg = error.message;
                         this.showAlert = true;
-                    } else {
-                        console.log(error);
                     }
                 });
         },
@@ -218,8 +214,6 @@ export default {
                     if (error.message) {
                         this.errorMsg = error.message;
                         this.showAlert = true;
-                    } else {
-                        console.log(error);
                     }
                 });
         },

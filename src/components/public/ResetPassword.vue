@@ -79,8 +79,6 @@ export default {
 
           if (error.message) {
             this.errorMsg = error.message;
-          } else {
-            console.log(error);
           }
         })
         .finally(() => {

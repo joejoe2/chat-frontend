@@ -83,8 +83,6 @@ export default {
         .catch((error) => {
           if (error.message) {
             this.errorMsg = error.message;
-          } else {
-            console.log(error);
           }
           this.$router.push({ name: "Login" });
         });
