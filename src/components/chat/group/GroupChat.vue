@@ -1,77 +1,41 @@
 <template>
-  <div class="card h-100">
-    <h6>{{ channelName}}</h6>
-    <q-virtual-scroll
-      style="max-height: 100%; overflow-x: hidden"
-      ref="scroller"
-      @virtual-scroll="onScroll"
-      :items="messagList"
-      :virtual-scroll-slice-size="0"
-    >
+  <div class="card" style="max-height: 50vh;">
+    <h6>{{ channelName }}</h6>
+    <q-virtual-scroll style="max-height: 100%; overflow-x: hidden" ref="scroller" @virtual-scroll="onScroll"
+      :items="messagList" :virtual-scroll-slice-size="0">
       <template v-slot="{ item, index }">
-        <div
-          v-if="item.from.id == myUserId"
-          class="row justify-content-end"
-          :key="item.id + item.version"
-          :index="index"
-        >
-          <QChatMessage
-            class="col col-12 col-sm-6 col-md-4 col-lg-4"
-            v-bind:name="item.from.username+' (You)'"
-            sent
-            v-bind:stamp="item.createAt.format('lll')"
-          >
+        <div v-if="item.from.id == myUserId" class="row justify-content-end" :key="item.id + item.version" :index="index">
+          <QChatMessage class="col col-12 col-sm-6 col-md-4 col-lg-4" v-bind:name="item.from.username + ' (You)'" sent
+            v-bind:stamp="item.createAt.format('lll')">
             <template v-slot:avatar>
               <q-btn flat>
-                <img class="q-message-avatar q-message-avatar--sent" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"/>
+                <img class="q-message-avatar q-message-avatar--sent" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
               </q-btn>
             </template>
-            <div v-if="item.messageType=='MESSAGE'">
-              {{ item.content }}
-            </div>
-            <div v-if="item.messageType=='INVITATION'">
-              {{ 'Invite '+item.content.username+' to join.'}}
-            </div>
-            <div v-if="item.messageType=='JOIN'">
-              {{ item.from.username+' join.'}}
-            </div>
+            <MessageTemplate :message="item"></MessageTemplate>
           </QChatMessage>
         </div>
-        <div
-          v-else
-          class="row justify-content-start"
-          :key="item.id + item.version"
-          :index="index"
-        >
-          <QChatMessage
-            class="col col-12 col-sm-6 col-md-4 col-lg-4"
-            v-bind:name="item.from.username"
-            v-bind:stamp="item.createAt.format('lll')"
-          >
+        <div v-else class="row justify-content-start" :key="item.id + item.version" :index="index">
+          <QChatMessage class="col col-12 col-sm-6 col-md-4 col-lg-4" v-bind:name="item.from.username"
+            v-bind:stamp="item.createAt.format('lll')">
             <template v-slot:avatar>
               <q-btn flat>
-                <img class="q-message-avatar q-message-avatar--received" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"/>
+                <img class="q-message-avatar q-message-avatar--received"
+                  src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
                 <q-popup-proxy>
                   <q-card>
                     <q-card-section>
                       <div class="text-h6">{{ item.from.username }}</div>
                     </q-card-section>
                     <q-card-section>
-                      <button v-bind:value="item.from.id" onclick="navigator.clipboard.writeText(this.value)">Copy ID</button>
+                      <button v-bind:value="item.from.id" onclick="navigator.clipboard.writeText(this.value)">Copy
+                        ID</button>
                     </q-card-section>
                   </q-card>
                 </q-popup-proxy>
               </q-btn>
             </template>
-            <div v-if="item.messageType=='MESSAGE'">
-              {{ item.content }}
-            </div>
-            <div v-if="item.messageType=='INVITATION'">
-              {{ 'Invite '+item.content.username+' to join.'}}
-            </div>
-            <div v-if="item.messageType=='JOIN'">
-              {{ item.from.username+' join.'}}
-            </div>
+            <MessageTemplate :message="item"></MessageTemplate>
           </QChatMessage>
         </div>
       </template>
@@ -79,18 +43,9 @@
 
     <div class="mb-2">
       <label for="sendMessage">sendMessage</label>
-      <input
-        v-model="message"
-        name="sendMessage"
-        type="text"
-        class="form-control"
-        v-bind:class="{ 'is-invalid': errors.message }"
-      />
-      <div
-        class="invalid-feedback"
-        v-for="error in errors.message"
-        v-bind:key="error"
-      >
+      <input v-model="message" name="sendMessage" type="text" class="form-control"
+        v-bind:class="{ 'is-invalid': errors.message }" />
+      <div class="invalid-feedback" v-for="error in errors.message" v-bind:key="error">
         {{ error }}
       </div>
       <div v-if="errorMsg" class="alert alert-danger" role="alert">
@@ -99,37 +54,6 @@
       <button class="btn btn-success" v-on:click="sendMessage(message)">
         send
       </button>
-      <q-btn color="purple" label="Invite others">
-        <q-menu>
-          <div>
-            <label for="invite">Type user ID:</label>
-            <input
-              v-model="invitee"
-              name="invitee"
-              type="text"
-              class="form-control"
-              v-bind:class="{ 'is-invalid': errors.targetUserId }"
-            />
-            <div
-              class="invalid-feedback"
-              v-for="error in errors.targetUserId"
-              v-bind:key="error"
-            >
-              {{ error }}
-            </div>
-            <div v-if="errorMsg" class="alert alert-danger" role="alert">
-              {{ errorMsg }}
-            </div>
-              <q-btn
-                color="primary"
-                label="Invite"
-                push
-                size="sm"
-                v-on:click="invite"
-              />
-          </div>
-        </q-menu>
-      </q-btn>
     </div>
   </div>
 </template>
@@ -137,12 +61,14 @@
 <script>
 import store from "../../../store/index";
 import { QChatMessage, QVirtualScroll } from "quasar";
+import MessageTemplate from './MessageTemplate.vue';
 
 export default {
   name: "GroupChat",
   components: {
     QChatMessage,
     QVirtualScroll,
+    MessageTemplate,
   },
   props: {
     channel: {
@@ -154,8 +80,8 @@ export default {
       required: true,
     },
   },
-  mounted(){
-    setTimeout(()=>this.scrollToBottom(), 100);
+  mounted() {
+    setTimeout(() => this.scrollToBottom(), 100);
   },
   data() {
     return {
@@ -172,9 +98,9 @@ export default {
       this.autoScrollToBottom = true;
     },
     onScroll(details) {
-      if (this.autoScrollToBottom && details.direction == 'decrease'){
+      if (this.autoScrollToBottom && details.direction == 'decrease') {
         this.autoScrollToBottom = false;
-      }else if(!this.autoScrollToBottom && details.index == details.to){
+      } else if (!this.autoScrollToBottom && details.index == details.to) {
         this.autoScrollToBottom = true;
       }
     },
@@ -199,27 +125,6 @@ export default {
           }
         });
     },
-    invite(){
-      store
-        .dispatch("chat/inviteToGroupChannel", {
-          channelId: this.channel.id,
-          targetUserId: this.invitee,
-        })
-        .then(() => {
-          //success
-          this.scrollToBottom();
-        })
-        .catch((error) => {
-          if (error.errors) this.errors = error.errors;
-          else this.errors = {};
-          
-          if (error.message) {
-            this.errorMsg = error.message;
-          } else {
-            this.errorMsg = "";
-          }
-        });
-    }
   },
   computed: {
     myUserId() {
@@ -235,11 +140,10 @@ export default {
       this.autoScrollToBottom = true;
       this.errors = {};
       this.errorMsg = "";
-      setTimeout(()=>this.scrollToBottom(), 100);
+      setTimeout(() => this.scrollToBottom(), 100);
     },
   },
 };
 </script>
 
-<style>
-</style>
+<style></style>
