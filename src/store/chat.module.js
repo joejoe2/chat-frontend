@@ -167,13 +167,55 @@ export const chat = {
                 return Promise.reject(parseError(error));
             });
         },
-        getInvitations(context, payload){
+        getInvitations(context, payload) {
             return chatService.getInvitations(payload.since, payload.page, payload.size).then((response) => {
                 return response;
             }).catch(error => {
                 return Promise.reject(parseError(error));
             });
-        }
+        },
+        kickOff(context, payload) {
+            return chatService.kickOff(payload.channelId, payload.targetUserId).then((response) => {
+                return response;
+            }).catch(error => {
+                return Promise.reject(parseError(error));
+            });
+        },
+        leave(context, payload) {
+            return chatService.leave(payload.channelId).then((response) => {
+                return response;
+            }).catch(error => {
+                return Promise.reject(parseError(error));
+            });
+        },
+        getBanned(context, payload) {
+            return chatService.getBanned(payload.channelId).then((response) => {
+                return response;
+            }).catch(error => {
+                return Promise.reject(parseError(error));
+            });
+        },
+        editBanned(context, payload) {
+            return chatService.editBanned(payload.channelId, payload.targetUserId, payload.isBanned).then((response) => {
+                return response;
+            }).catch(error => {
+                return Promise.reject(parseError(error));
+            });
+        },
+        getAdmin(context, payload) {
+            return chatService.getAdmin(payload.channelId).then((response) => {
+                return response;
+            }).catch(error => {
+                return Promise.reject(parseError(error));
+            });
+        },
+        editAdmin(context, payload) {
+            return chatService.editAdmin(payload.channelId, payload.targetUserId, payload.isAdmin).then((response) => {
+                return response;
+            }).catch(error => {
+                return Promise.reject(parseError(error));
+            });
+        },
     },
     mutations: {},
 };
