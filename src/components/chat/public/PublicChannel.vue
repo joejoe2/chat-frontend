@@ -81,7 +81,6 @@
 <script>
 import store from "../../../store/index";
 import Loading from "vue-loading-overlay";
-import "vue-loading-overlay/dist/vue-loading.css";
 import PageNavigation from "../../common/PageNavigation.vue";
 import PublicChat from "../public/PublicChat.vue";
 

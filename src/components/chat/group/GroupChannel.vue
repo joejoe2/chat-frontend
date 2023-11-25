@@ -90,7 +90,6 @@
 <script>
 import store from "../../../store/index";
 import Loading from "vue-loading-overlay";
-import "vue-loading-overlay/dist/vue-loading.css";
 import GroupChat from "./GroupChat.vue";
 import GroupChatSetting from './GroupChatSetting.vue';
 import GroupMemberSetting from './GroupMemberSetting.vue';

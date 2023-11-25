@@ -5,7 +5,7 @@ import authHeader from "./auth-header"
 import Qs from 'qs';
 
 const instance = axios.create({
-    baseURL: process.env.VUE_APP_CHAT_API_URL,
+    baseURL: import.meta.env.VITE_APP_CHAT_API_URL,
     headers: { 'Content-Type': 'application/json' },
     timeout: 10000,
 });

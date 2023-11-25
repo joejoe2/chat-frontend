@@ -1,10 +1,10 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import router from "./router"
-//import store from "./store"
+import { Quasar } from 'quasar'
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap"
-import { Quasar } from 'quasar'
+import 'vue-loading-overlay/dist/css/index.css';
 import quasarUserOptions from './quasar-user-options'
+import router from './router'
 
-createApp(App).use(Quasar, quasarUserOptions).use(router).mount('#app');
+createApp(App).use(Quasar, quasarUserOptions).use(router).mount('#app')
