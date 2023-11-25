@@ -14,11 +14,9 @@
           <a class="page-link">{{ pageNum }}</a>
         </li>
         <li v-else class="page-item">
-          <a
-            class="page-link"
-            v-on:click="updateCurrentPage(pageNum - 1)"
-            >{{ pageNum }}</a
-          >
+          <a class="page-link" v-on:click="updateCurrentPage(pageNum - 1)">{{
+            pageNum
+          }}</a>
         </li>
       </template>
       <li class="page-item">
@@ -35,30 +33,29 @@
 
 <script>
 export default {
-    name: "PageNavigation",
-    props: {
-        totalPages: {
-            required: true,
-            type: Number,
-        },
-        currentPage: {
-            required: true,
-            type: Number,
-        },
+  name: "PageNavigation",
+  props: {
+    totalPages: {
+      required: true,
+      type: Number,
     },
-    data(){
-        return {
-            current: this.currentPage,
-        };
+    currentPage: {
+      required: true,
+      type: Number,
     },
-    methods: {
-        updateCurrentPage(pageNum){
-          this.current = pageNum;
-          this.$emit('onPageChanged', pageNum);
-        },
-    }
+  },
+  data() {
+    return {
+      current: this.currentPage,
+    };
+  },
+  methods: {
+    updateCurrentPage(pageNum) {
+      this.current = pageNum;
+      this.$emit("onPageChanged", pageNum);
+    },
+  },
 };
 </script>
 
-<style>
-</style>
+<style></style>

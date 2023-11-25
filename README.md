@@ -1,5 +1,10 @@
 # Chat Frontend
 
-```npm install```
+## Get Started
+`npm install`
 
-```npm run dev```
+`npm run dev`
+
+## Lint
+
+`npx prettier --write .`

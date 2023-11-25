@@ -241,8 +241,8 @@ export default {
           };
           this.eventSource.onerror = this.eventSource.onclose = () => {
             this.refreshMessages(this.lastConnect);
-            if(this.eventSource) {
-              setTimeout(()=>this.subscribe(), 2000);
+            if (this.eventSource) {
+              setTimeout(() => this.subscribe(), 2000);
               this.eventSource.close();
             }
           };
@@ -252,12 +252,12 @@ export default {
   computed: {
     channelList() {
       return [...this.channels.values()].sort(
-        (a, b) => b.updateAt - a.updateAt
+        (a, b) => b.updateAt - a.updateAt,
       );
     },
     messagList() {
       return [...this.messages.get(this.selectedChannel.id).values()].sort(
-        (a, b) => a.createAt - b.createAt
+        (a, b) => a.createAt - b.createAt,
       );
     },
     myUserId() {
@@ -271,5 +271,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

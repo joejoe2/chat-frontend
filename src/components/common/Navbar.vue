@@ -20,10 +20,7 @@
       >
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a
-              class="nav-link active"
-              aria-current="page"
-              v-on:click="toHome"
+            <a class="nav-link active" aria-current="page" v-on:click="toHome"
               >Home</a
             >
           </li>
@@ -42,20 +39,28 @@
                 <a class="dropdown-item" v-on:click="toProfile">Profile</a>
               </li>
               <li>
-                <a class="dropdown-item" v-on:click="toPublicChat">Public Chat (Beta)</a>
+                <a class="dropdown-item" v-on:click="toPublicChat"
+                  >Public Chat (Beta)</a
+                >
               </li>
               <li>
-                <a class="dropdown-item" v-on:click="toPrivateChat">Private Chat (Beta)</a>
+                <a class="dropdown-item" v-on:click="toPrivateChat"
+                  >Private Chat (Beta)</a
+                >
               </li>
               <li>
-                <a class="dropdown-item" v-on:click="toGroupChat">Group Chat (Beta)</a>
+                <a class="dropdown-item" v-on:click="toGroupChat"
+                  >Group Chat (Beta)</a
+                >
               </li>
               <li v-if="isAdmin">
                 <a class="dropdown-item" v-on:click="toAdmin">Admin</a>
               </li>
               <li><hr class="dropdown-divider" /></li>
               <li>
-                <a class="dropdown-item" v-on:click="toPasswordChange">Change Password</a>
+                <a class="dropdown-item" v-on:click="toPasswordChange"
+                  >Change Password</a
+                >
               </li>
               <li>
                 <a class="dropdown-item" v-on:click="logout">Logout</a>
@@ -93,20 +98,20 @@ export default {
     toHome() {
       this.$router.push({ name: "Home" });
     },
-    toAdmin(){
-      this.$router.push({name: "Admin"});
+    toAdmin() {
+      this.$router.push({ name: "Admin" });
     },
-    toPasswordChange(){
-      this.$router.push({name: "PasswordChange"});
+    toPasswordChange() {
+      this.$router.push({ name: "PasswordChange" });
     },
-    toPublicChat(){
-      this.$router.push({name: "PublicChannel"});
+    toPublicChat() {
+      this.$router.push({ name: "PublicChannel" });
     },
-    toPrivateChat(){
-      this.$router.push({name: "PrivateChannel"});
+    toPrivateChat() {
+      this.$router.push({ name: "PrivateChannel" });
     },
-    toGroupChat(){
-      this.$router.push({name: "GroupChannel"});
+    toGroupChat() {
+      this.$router.push({ name: "GroupChannel" });
     },
   },
   computed: {
@@ -118,11 +123,10 @@ export default {
       return store.state.auth.status.loggedIn;
     },
     isAdmin() {
-      return store.state.auth.user.role=='ADMIN';
+      return store.state.auth.user.role == "ADMIN";
     },
   },
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

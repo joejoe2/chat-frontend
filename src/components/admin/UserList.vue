@@ -1,11 +1,13 @@
 <template>
   <div class="row justify-content-center mt-3">
     <div class="card w-100 mb-4">
-      <loading v-model:active="isLoading"
-                 :can-cancel="false"
-                 :is-full-page="true"
-                 :loader="'dots'"/>
-      
+      <loading
+        v-model:active="isLoading"
+        :can-cancel="false"
+        :is-full-page="true"
+        :loader="'dots'"
+      />
+
       <div class="card-body">
         <h2 class="card-title text-center">User List</h2>
         <ul class="list-group list-group-flush">
@@ -49,11 +51,31 @@
                 </div>
                 <!-- User is active or not -->
                 <div class="col-sm-2 col-md-2 col-lg-1">
-                  <svg v-if="user.isActive" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                  <svg
+                    v-if="user.isActive"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="green"
+                    class="bi bi-check-circle-fill"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"
+                    />
                   </svg>
-                  <svg v-if="!user.isActive" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
-                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+                  <svg
+                    v-if="!user.isActive"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="red"
+                    class="bi bi-x-circle-fill"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"
+                    />
                   </svg>
                 </div>
                 <!-- User email -->
@@ -65,17 +87,64 @@
                   <span>{{ moment(new Date(user.registeredAt)) }}</span>
                 </div>
                 <!-- operation button -->
-                <div v-if="user.id!=myUserId" class="dropdown col-sm-1 col-md-1 col-lg-1">
-                  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                <div
+                  v-if="user.id != myUserId"
+                  class="dropdown col-sm-1 col-md-1 col-lg-1"
+                >
+                  <button
+                    class="btn btn-secondary dropdown-toggle"
+                    type="button"
+                    id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
                     *
                   </button>
-                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a v-if="user.role!='ADMIN'" class="dropdown-item" v-on:click="changeRoleOf(user.id, 'ADMIN')" >Change to ADMIN</a></li>
-                    <li><a v-if="user.role!='STAFF'" class="dropdown-item" v-on:click="changeRoleOf(user.id, 'STAFF')" >Change to STAFF</a></li>
-                    <li><a v-if="user.role!='NORMAL'" class="dropdown-item" v-on:click="changeRoleOf(user.id, 'NORMAL')" >Change to NORMAL</a></li>
+                  <ul
+                    class="dropdown-menu"
+                    aria-labelledby="dropdownMenuButton1"
+                  >
+                    <li>
+                      <a
+                        v-if="user.role != 'ADMIN'"
+                        class="dropdown-item"
+                        v-on:click="changeRoleOf(user.id, 'ADMIN')"
+                        >Change to ADMIN</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        v-if="user.role != 'STAFF'"
+                        class="dropdown-item"
+                        v-on:click="changeRoleOf(user.id, 'STAFF')"
+                        >Change to STAFF</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        v-if="user.role != 'NORMAL'"
+                        class="dropdown-item"
+                        v-on:click="changeRoleOf(user.id, 'NORMAL')"
+                        >Change to NORMAL</a
+                      >
+                    </li>
 
-                    <li><a v-if="user.isActive" class="dropdown-item text-danger" v-on:click="setUserActive(user.id, false)" >Deactivate</a></li>
-                    <li><a v-if="!user.isActive" class="dropdown-item text-danger" v-on:click="setUserActive(user.id, true)" >Activate</a></li>
+                    <li>
+                      <a
+                        v-if="user.isActive"
+                        class="dropdown-item text-danger"
+                        v-on:click="setUserActive(user.id, false)"
+                        >Deactivate</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        v-if="!user.isActive"
+                        class="dropdown-item text-danger"
+                        v-on:click="setUserActive(user.id, true)"
+                        >Activate</a
+                      >
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -83,8 +152,11 @@
           </template>
         </ul>
 
-        <PageNavigation :currentPage="userList.currentPage" :totalPages="userList.totalPages"
-         v-on:onPageChanged="updateUserList"></PageNavigation>
+        <PageNavigation
+          :currentPage="userList.currentPage"
+          :totalPages="userList.totalPages"
+          v-on:onPageChanged="updateUserList"
+        ></PageNavigation>
       </div>
     </div>
   </div>
@@ -92,13 +164,13 @@
 
 <script>
 import store from "../../store/index";
-import Loading from 'vue-loading-overlay';
-import PageNavigation from '../common/PageNavigation.vue';
+import Loading from "vue-loading-overlay";
+import PageNavigation from "../common/PageNavigation.vue";
 import moment from "moment";
 
 export default {
   name: "UserList",
-  components:{
+  components: {
     Loading,
     PageNavigation,
   },
@@ -118,11 +190,11 @@ export default {
     };
   },
   methods: {
-    moment(obj){
+    moment(obj) {
       return moment(obj);
     },
     getUserList(page, size) {
-      this.isLoading=true;
+      this.isLoading = true;
       store
         .dispatch("admin/getUserList", {
           page: page,
@@ -133,15 +205,16 @@ export default {
         })
         .catch((error) => {
           console.log(error.errors || error.message);
-        }).finally(()=>{
-          this.isLoading=false;
+        })
+        .finally(() => {
+          this.isLoading = false;
         });
     },
-    updateUserList(pageNum){
+    updateUserList(pageNum) {
       //refresh user list
       this.getUserList(pageNum, this.userList.pageSize);
     },
-    changeRoleOf(userId, toRole){
+    changeRoleOf(userId, toRole) {
       store
         .dispatch("admin/changeRoleOf", {
           id: userId,
@@ -155,9 +228,9 @@ export default {
           alert(error.errors || error.message);
         });
     },
-    setUserActive(userId, isActive){
+    setUserActive(userId, isActive) {
       store
-        .dispatch(isActive?"admin/activateUser":"admin/deactivateUser", {
+        .dispatch(isActive ? "admin/activateUser" : "admin/deactivateUser", {
           id: userId,
         })
         .then(() => {
@@ -181,5 +254,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

@@ -158,12 +158,11 @@ export default {
       this.selectedChannelId = "";
       this.getPublicChannelList(
         this.channelList.currentPage,
-        this.channelList.pageSize
+        this.channelList.pageSize,
       );
     },
   },
 };
 </script>
 
-<style>
-</style>
+<style></style>
