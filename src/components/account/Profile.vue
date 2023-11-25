@@ -72,7 +72,6 @@
 <script>
 import store from "../../store/index";
 import Loading from "vue-loading-overlay";
-import "vue-loading-overlay/dist/vue-loading.css";
 import moment from "moment";
 
 export default {
@@ -110,5 +109,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

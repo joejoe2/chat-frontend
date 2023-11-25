@@ -1,12 +1,12 @@
 <template>
   <div class="card w-50 h-100 mb-4">
     <loading
-        v-model:active="isLoading"
-        :can-cancel="false"
-        :is-full-page="true"
-        :loader="'dots'"
-      />
-    
+      v-model:active="isLoading"
+      :can-cancel="false"
+      :is-full-page="true"
+      :loader="'dots'"
+    />
+
     <div class="card-body h-100">
       <q-virtual-scroll
         style="max-height: 100%; overflow-x: hidden"
@@ -24,19 +24,22 @@
           >
             <QChatMessage
               class="col col-12 col-sm-6 col-md-4 col-lg-2"
-              v-bind:name="item.from.username+' (You)'"
+              v-bind:name="item.from.username + ' (You)'"
               sent
               v-bind:stamp="item.createAt.format('lll')"
             >
-            <template v-slot:avatar>
-              <q-btn flat>
-                <img class="q-message-avatar q-message-avatar--sent" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"/>
-              </q-btn>
-            </template>
-            <div>
-              {{ item.content }}
-            </div>
-          </QChatMessage>
+              <template v-slot:avatar>
+                <q-btn flat>
+                  <img
+                    class="q-message-avatar q-message-avatar--sent"
+                    src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+                  />
+                </q-btn>
+              </template>
+              <div>
+                {{ item.content }}
+              </div>
+            </QChatMessage>
           </div>
           <div
             v-else
@@ -51,14 +54,22 @@
             >
               <template v-slot:avatar>
                 <q-btn flat>
-                  <img class="q-message-avatar q-message-avatar--received" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"/>
+                  <img
+                    class="q-message-avatar q-message-avatar--received"
+                    src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+                  />
                   <q-popup-proxy>
                     <q-card>
                       <q-card-section>
                         <div class="text-h6">{{ item.from.username }}</div>
                       </q-card-section>
                       <q-card-section>
-                        <button v-bind:value="item.from.id" onclick="navigator.clipboard.writeText(this.value)">Copy ID</button>
+                        <button
+                          v-bind:value="item.from.id"
+                          onclick="navigator.clipboard.writeText(this.value)"
+                        >
+                          Copy ID
+                        </button>
                       </q-card-section>
                     </q-card>
                   </q-popup-proxy>
@@ -102,7 +113,6 @@
 <script>
 import store from "../../../store/index";
 import Loading from "vue-loading-overlay";
-import "vue-loading-overlay/dist/vue-loading.css";
 import moment from "moment";
 import { QChatMessage, QVirtualScroll } from "quasar";
 
@@ -149,14 +159,14 @@ export default {
           this.onMessages(res.messages);
           if (res.hasNext) this.getAllMessages(page + 1);
           else {
-            setTimeout(()=>this.scrollToBottom(), 100);
+            setTimeout(() => this.scrollToBottom(), 100);
             this.isLoading = false;
             this.subscribe();
           }
         })
         .catch((error) => {
           console.log(error);
-          setTimeout(()=>this.scrollToBottom(), 100);
+          setTimeout(() => this.scrollToBottom(), 100);
           this.isLoading = false;
           this.subscribe();
         });
@@ -212,13 +222,13 @@ export default {
         });
     },
     scrollToBottom() {
-      this.$refs.scroller.scrollTo(this.messagList.length-1, "start-force");
+      this.$refs.scroller.scrollTo(this.messagList.length - 1, "start-force");
       this.autoScrollToBottom = true;
     },
     onScroll(details) {
-      if (this.autoScrollToBottom && details.direction == 'decrease'){
+      if (this.autoScrollToBottom && details.direction == "decrease") {
         this.autoScrollToBottom = false;
-      }else if(!this.autoScrollToBottom && details.index == details.to){
+      } else if (!this.autoScrollToBottom && details.index == details.to) {
         this.autoScrollToBottom = true;
       }
     },
@@ -241,8 +251,8 @@ export default {
           };
           this.eventSource.onerror = this.eventSource.onclose = () => {
             this.refreshMessages(this.lastConnect);
-            if(this.eventSource) {
-              setTimeout(()=>this.subscribe(), 2000);
+            if (this.eventSource) {
+              setTimeout(() => this.subscribe(), 2000);
               this.eventSource.close();
             }
           };
@@ -252,7 +262,7 @@ export default {
   computed: {
     messagList() {
       return [...this.messages.values()].sort(
-        (a, b) => a.createAt - b.createAt
+        (a, b) => a.createAt - b.createAt,
       );
     },
     myUserId() {
@@ -275,5 +285,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

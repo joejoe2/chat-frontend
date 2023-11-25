@@ -17,13 +17,16 @@
         >
           <QChatMessage
             class="col col-12 col-sm-6 col-md-4 col-lg-4"
-            v-bind:name="item.from.username+' (You)'"
+            v-bind:name="item.from.username + ' (You)'"
             sent
             v-bind:stamp="item.createAt.format('lll')"
           >
             <template v-slot:avatar>
               <q-btn flat>
-                <img class="q-message-avatar q-message-avatar--sent" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"/>
+                <img
+                  class="q-message-avatar q-message-avatar--sent"
+                  src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+                />
               </q-btn>
             </template>
             <div>
@@ -44,14 +47,22 @@
           >
             <template v-slot:avatar>
               <q-btn flat>
-                <img class="q-message-avatar q-message-avatar--received" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"/>
+                <img
+                  class="q-message-avatar q-message-avatar--received"
+                  src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+                />
                 <q-popup-proxy>
                   <q-card>
                     <q-card-section>
                       <div class="text-h6">{{ item.from.username }}</div>
                     </q-card-section>
                     <q-card-section>
-                      <button v-bind:value="item.from.id" onclick="navigator.clipboard.writeText(this.value)">Copy ID</button>
+                      <button
+                        v-bind:value="item.from.id"
+                        onclick="navigator.clipboard.writeText(this.value)"
+                      >
+                        Copy ID
+                      </button>
                     </q-card-section>
                   </q-card>
                 </q-popup-proxy>
@@ -123,8 +134,8 @@ export default {
       required: true,
     },
   },
-  mounted(){
-    setTimeout(()=>this.scrollToBottom(), 100);
+  mounted() {
+    setTimeout(() => this.scrollToBottom(), 100);
   },
   data() {
     return {
@@ -140,9 +151,9 @@ export default {
       this.autoScrollToBottom = true;
     },
     onScroll(details) {
-      if (this.autoScrollToBottom && details.direction == 'decrease'){
+      if (this.autoScrollToBottom && details.direction == "decrease") {
         this.autoScrollToBottom = false;
-      }else if(!this.autoScrollToBottom && details.index == details.to){
+      } else if (!this.autoScrollToBottom && details.index == details.to) {
         this.autoScrollToBottom = true;
       }
     },
@@ -167,7 +178,7 @@ export default {
           }
         });
     },
-    block(isBlocked=true){
+    block(isBlocked = true) {
       console.log(isBlocked);
       store
         .dispatch("chat/blockPrivateChannel", {
@@ -196,9 +207,9 @@ export default {
     chatTarget() {
       return this.channel.members.find((m) => m.id != this.myUserId);
     },
-    isBlocked(){
+    isBlocked() {
       return this.channel.isBlocked || false;
-    }
+    },
   },
   watch: {
     channel: function () {
@@ -206,11 +217,10 @@ export default {
       this.autoScrollToBottom = true;
       this.errors = {};
       this.errorMsg = "";
-      setTimeout(()=>this.scrollToBottom(), 100);
+      setTimeout(() => this.scrollToBottom(), 100);
     },
   },
 };
 </script>
 
-<style>
-</style>
+<style></style>

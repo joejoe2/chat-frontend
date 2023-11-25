@@ -19,18 +19,38 @@
         <q-menu>
           <div>
             <label for="invite">Type user ID:</label>
-            <input v-model="invitee" name="invitee" type="text" class="form-control"
-              v-bind:class="{ 'is-invalid': errors.targetUserId }" />
-            <div class="invalid-feedback" v-for="error in errors.targetUserId" v-bind:key="error">
+            <input
+              v-model="invitee"
+              name="invitee"
+              type="text"
+              class="form-control"
+              v-bind:class="{ 'is-invalid': errors.targetUserId }"
+            />
+            <div
+              class="invalid-feedback"
+              v-for="error in errors.targetUserId"
+              v-bind:key="error"
+            >
               {{ error }}
             </div>
-            <q-btn color="primary" label="Invite" push size="sm" v-on:click="invite" />
+            <q-btn
+              color="primary"
+              label="Invite"
+              push
+              size="sm"
+              v-on:click="invite"
+            />
           </div>
         </q-menu>
       </q-btn>
     </div>
     <div>
-      <q-btn color="red" label="Leave" @click="leave()" class="w-50 self-center">
+      <q-btn
+        color="red"
+        label="Leave"
+        @click="leave()"
+        class="w-50 self-center"
+      >
       </q-btn>
     </div>
   </div>
@@ -41,8 +61,7 @@ import store from "../../../store/index";
 
 export default {
   name: "GroupChatSetting",
-  components: {
-  },
+  components: {},
   computed: {
     channelName() {
       return this.channel.name;
@@ -83,7 +102,8 @@ export default {
       store
         .dispatch("chat/leave", {
           channelId: this.channel.id,
-        }).catch((error) => {
+        })
+        .catch((error) => {
           if (error.errors) this.errors = error.errors;
           else this.errors = {};
 
@@ -93,7 +113,7 @@ export default {
           }
         });
     },
-  }
+  },
 };
 </script>
 

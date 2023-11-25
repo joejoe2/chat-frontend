@@ -3,16 +3,14 @@
 </template>
 
 <script>
-import UserList from './UserList.vue';
+import UserList from "./UserList.vue";
 
 export default {
-    name: 'Admin',
-    components: {
-      UserList,
-    },
-}
+  name: "Admin",
+  components: {
+    UserList,
+  },
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

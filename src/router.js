@@ -3,14 +3,14 @@ import store from "./store";
 import Profile from "./components/account/Profile.vue";
 import Login from "./components/public/Login.vue";
 import Home from "./components/common/Home.vue";
-import Register from './components/public/Register.vue';
-import Admin from './components/admin/Admin.vue';
-import PasswordChange from './components/account/PasswordChange.vue';
-import ForgetPassword from './components/public/ForgetPassword.vue';
-import ResetPassword from './components/public/ResetPassword.vue';
-import PublicChannel from './components/chat/public/PublicChannel.vue';
-import PrivateChannel from './components/chat/private/PrivateChannel.vue';
-import GroupChannel from './components/chat/group/GroupChannel.vue';
+import Register from "./components/public/Register.vue";
+import Admin from "./components/admin/Admin.vue";
+import PasswordChange from "./components/account/PasswordChange.vue";
+import ForgetPassword from "./components/public/ForgetPassword.vue";
+import ResetPassword from "./components/public/ResetPassword.vue";
+import PublicChannel from "./components/chat/public/PublicChannel.vue";
+import PrivateChannel from "./components/chat/private/PrivateChannel.vue";
+import GroupChannel from "./components/chat/group/GroupChannel.vue";
 
 const routes = [
   {
@@ -70,8 +70,8 @@ const routes = [
   },
   //for 404
   {
-    path: '/:pathMatch(.*)*',
-    name: 'NotFound',
+    path: "/:pathMatch(.*)*",
+    name: "NotFound",
     component: Home,
   },
 ];
@@ -86,9 +86,21 @@ router.afterEach((to) => {
     router.replace({ name: "Home" });
   }
 
-  if ((to.name != "Login" && to.name != "Register" && to.name != "ForgetPassword" && to.name != "ResetPassword") && !store.state.auth.status.loggedIn) {
+  if (
+    to.name != "Login" &&
+    to.name != "Register" &&
+    to.name != "ForgetPassword" &&
+    to.name != "ResetPassword" &&
+    !store.state.auth.status.loggedIn
+  ) {
     router.push({ name: "Login" });
-  } else if ((to.name == "Login" || to.name == "Register" || to.name == "ForgetPassword" || to.name == "ResetPassword") && store.state.auth.status.loggedIn) {
+  } else if (
+    (to.name == "Login" ||
+      to.name == "Register" ||
+      to.name == "ForgetPassword" ||
+      to.name == "ResetPassword") &&
+    store.state.auth.status.loggedIn
+  ) {
     router.replace({ name: "Home" });
   }
 
