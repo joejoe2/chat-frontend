@@ -169,6 +169,13 @@ export default {
       administrators: [],
     };
   },
+  watch: {
+    channel: function () {
+      this.getMembers();
+      this.getBanned();
+      this.getAdmin();
+    },
+  },
   created() {
     this.getMembers();
     this.getBanned();
